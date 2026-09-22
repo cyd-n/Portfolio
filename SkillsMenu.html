@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory Card · System Menu</title>
+
+<!-- ===================== Libraries ===================== -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { gcbg:'#0d0c24', panel:'#171540', ink:'#f1efff', sub:'#a29dd0', faint:'#6f6aa8', gold:'#ffd21e', lav:'#b9a6f2', ind:'#5b50b8' },
+      fontFamily: { display:['"Days One"','sans-serif'], body:['Quicksand','sans-serif'] }
+    }}
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Days+One&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<link rel="stylesheet" href="Css/GameCubeProjects.css">
+</head>
+
+<body class="bg-gcbg text-ink min-h-screen select-none antialiased"
+      x-data="memcard()" @keydown.window="onKey($event)">
+
+<!-- ============ Ambient background: drifting wireframe cubes ============ -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+  <div class="absolute inset-0 dotgrid"></div>
+  <div class="shape" style="width:420px;height:420px;top:-120px;left:-80px;animation-duration:47s"></div>
+  <div class="shape" style="width:300px;height:300px;bottom:8%;left:6%;animation-duration:61s;animation-direction:reverse"></div>
+  <div class="shape" style="width:520px;height:520px;top:22%;right:-160px;animation-duration:72s"></div>
+  <div class="shape gold" style="width:220px;height:220px;bottom:-60px;right:22%;animation-duration:38s"></div>
+  <div class="shape" style="width:150px;height:150px;top:12%;left:38%;animation-duration:55s;animation-direction:reverse"></div>
+  <div class="absolute inset-0 vignette"></div>
+</div>
+
+<!-- ============ Boot screen (also unlocks WebAudio on first click) ============ -->
+<div x-cloak x-show="!power" @click="powerOn()"
+     class="fixed inset-0 z-[60] bg-[#05050f] grid place-items-center transition-opacity duration-700"
+     :class="power ? 'opacity-0 pointer-events-none' : 'opacity-100'">
+  <div class="text-center px-6" style="perspective:700px">
+    <div class="cube3d mx-auto" style="width:88px;height:88px">
+      <svg viewBox="0 0 64 64" fill="none" stroke="#b9a6f2" stroke-width="2" stroke-linejoin="round" class="w-full h-full">
+        <path d="M32 6 54 18v24L32 54 10 42V18z"/><path d="M10 18l22 12 22-12M32 30v24"/>
+      </svg>
+    </div>
+    <div class="font-display text-2xl tracking-[.4em] mt-7 text-white">Quidon<span class="text-lav">Roethof</span></div>
+    <div class="text-[10px] tracking-[.45em] text-faint mt-2">Profolio</div>
+    <button @click.stop="powerOn()"
+            class="mt-12 w-20 h-20 rounded-full border-2 border-lav/40 grid place-items-center mx-auto relative hover:border-gold transition-colors">
+      <span class="absolute inset-0 rounded-full border border-lav/30 animate-ping" style="animation-duration:2.4s"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-8 h-8 text-lav">
+        <path d="M12 3v9"/><path d="M17.5 6.5a8 8 0 1 1-11 0"/>
+      </svg>
+    </button>
+    <div class="mt-5 text-[11px] tracking-[.35em] text-faint">PRESS POWER OR ANY KEY</div>
+  </div>
+</div>
+
+<!-- ============ Main menu ============ -->
+<main x-cloak class="relative z-10 mx-auto max-w-6xl px-4 sm:px-8 pt-5 pb-4 min-h-screen flex flex-col transition-all duration-700 ease-out"
+      :class="power ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'">
+
+  <!-- Header -->
+  <header class="flex items-end justify-between gap-5 flex-wrap">
+    <div class="flex items-center gap-3">
+      <svg viewBox="0 0 64 64" class="w-9 h-9">
+        <path d="M32 5 55 17.5 32 30 9 17.5z" fill="#b9a6f2"/>
+        <path d="M9 17.5V42l23 12.5V30z" fill="#5b50b8"/>
+        <path d="M55 17.5V42L32 54.5V30z" fill="#3f3787"/>
+      </svg>
+      <div>
+        <div class="font-display tracking-[.22em] text-[15px] leading-none">Quidon Roethof</div>
+        <div class="text-[10px] tracking-[.3em] text-faint mt-1.5">Skill Menu · BIOS 0.1</div>
+      </div>
+    </div>
+
+    <!-- Slot tabs -->
+    <div class="flex gap-1">
+      <template x-for="s in ['FrontEnd','BackEnd', 'Others']" :key="s">
+        <button type="button" @click="switchSlot(s)" class="tab" :class="activeSlot===s ? 'tab-on' : 'tab-off'">
+          <span class="flex items-center gap-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+              <rect x="4.5" y="4" width="15" height="16" rx="2"/><path d="M8.5 4v4.5h7V4"/>
+            </svg>
+            <span class="font-display tracking-[.18em] text-sm" x-text="s"></span>
+          </span>
+          <span class="block text-[10px] mt-1 tracking-widest opacity-80" x-text="(slots[s].cap - blockSum(s)) + ' BLOCKS FREE'"></span>
+        </button>
+      </template>
+    </div>
+
+    <!-- Card gauge -->
+    <div class="flex items-start gap-3">
+      <div class="text-right">
+        <div class="text-[10px] tracking-[.22em] text-faint" x-text="card.label + ' · ' + files.length + ' FILES'"></div>
+        <div class="font-display text-gold text-lg leading-tight mt-0.5">
+          <span x-text="free"></span> <span class="text-[10px] text-sub font-body font-bold tracking-[.2em]">BLOCKS FREE</span>
+        </div>
+        <div class="mt-1.5 flex gap-[3px] justify-end hidden sm:flex">
+          <template x-for="i in 24" :key="i">
+            <span class="w-1.5 h-3 rounded-[2px]" :class="i <= meterCells() ? 'bg-lav' : 'bg-white/10'"></span>
+          </template>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Icon grid -->
+  <section class="flex-1 flex items-center justify-center py-8">
+    <div class="w-full max-w-[960px]">
+
+    <div x-show="files.length" x-ref="grid"
+     class="relative grid grid-cols-[192px_192px] justify-center w-full mx-auto gap-x-3 gap-y-8 transition-all duration-200"
+     :class="switching ? 'opacity-0 scale-[.97]' : 'opacity-100 scale-100'">
+
+    <template x-for="(f,i) in files" :key="activeSlot + '-' + f.id">
+        <button type="button"
+                data-tile
+                class="w-48 h-48 rounded-xl bg-white/[.04] border border-white/[.08] backdrop-blur-sm flex items-center justify-center transition-all duration-200"
+                :class="i === cursor
+                    ? 'bg-white/[.09] border-yellow-400/30'
+                    : 'hover:bg-white/[.07]'"
+                @mouseenter="hoverTile(i)"
+                @click="clickTile(i)">
+
+            <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg"
+                alt="Java"
+                class="w-28 h-28"
+            >
+        </button>
+    </template>
+
+      <div x-show="!files.length" x-cloak class="text-center py-16">
+        <svg viewBox="0 0 64 64" fill="none" stroke="#6f6aa8" stroke-width="2" class="w-14 h-14 mx-auto opacity-50">
+          <path d="M32 6 54 18v24L32 54 10 42V18z"/><path d="M10 18l22 12 22-12M32 30v24"/>
+        </svg>
+        <div class="font-display tracking-[.35em] mt-5 text-sub">NO DATA</div>
+        <p class="text-sm text-faint mt-2">There are no save files on this memory card.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- File details bar -->
+  <footer class="rounded-2xl bg-panel/85 border border-white/10 backdrop-blur px-4 sm:px-5 py-3.5 min-h-[88px] flex items-center">
+    <template x-if="sel">
+      <div class="flex items-center gap-4 w-full flex-wrap">
+        // imgs
+        <div class="min-w-0">
+          <div class="font-display text-[15px] sm:text-base text-gold tracking-wide truncate" x-text="sel.game"></div>
+          <div class="text-[13px] text-sub truncate mt-0.5" x-text="sel.desc"></div>
+          <div class="flex gap-2 mt-2">
+            <span class="chip" x-text="sel.blocks + ' BLOCKS'"></span>
+            <span class="chip" x-text="sel.date"></span>
+            <span class="chip" x-text="(cursor+1) + ' / ' + files.length"></span>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template x-if="!sel">
+      <div class="w-full text-center text-[11px] tracking-[.3em] text-faint">
+        USE THE HAND OR ARROW KEYS TO SELECT A SAVE FILE
+      </div>
+    </template>
+  </footer>
+
+  <div class="mt-2.5 text-center text-[10px] tracking-[.25em] text-faint/80 hidden sm:block">
+    ↑ ↓ ← → MOVE &nbsp;·&nbsp; ENTER SELECT &nbsp;·&nbsp; C COPY &nbsp;·&nbsp; M MOVE &nbsp;·&nbsp; DEL DELETE
+  </div>
+</main>
+
+<!-- ============ BIOS-style dialogs ============ -->
+<template x-if="dialog">
+  <div class="fixed inset-0 z-50 grid place-items-center p-4 dlg-back"
+       style="background:rgba(4,4,16,.62);backdrop-filter:blur(3px)" @click.self="dialog.buttons.find(b=>b.kind!=='primary') ? dialog.buttons.find(b=>b.kind!=='primary').fn() : closeDialog()">
+    <div class="dlg-panel" role="dialog" aria-modal="true">
+      <div class="w-11 h-11 mx-auto rounded-full grid place-items-center"
+           :class="dialog.danger ? 'bg-[#ff5470]/15 text-[#ff5470]' : 'bg-gold/15 text-gold'"
+           x-html="dicons[dialog.icon]" style="width:44px;height:44px"></div>
+      <div class="font-display tracking-[.18em] mt-4 text-lg" :class="dialog.danger ? 'text-[#ff8fa3]' : 'text-gold'" x-text="dialog.title"></div>
+      <p class="text-sm text-sub mt-2.5 leading-relaxed" x-text="dialog.body"></p>
+      <div class="flex justify-center gap-3 mt-7">
+        <template x-for="(b,bi) in dialog.buttons" :key="bi">
+          <button type="button" class="dbtn"
+                  :class="b.kind==='primary' ? (dialog.danger ? 'dbtn-danger' : 'dbtn-primary') : 'dbtn-ghost'"
+                  x-text="b.label" @click="b.fn()"></button>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+/* ================= Save data ================= */
+const SAVES = {
+  FrontEnd: [
+    {
+      id: 'ww',
+      icon: './Imgs/Altair.png',
+      game: 'The Legend of Zelda: The Wind Waker',
+      desc: 'Quest file — Triforce shards 5/8. Second quest unlocked.',
+      blocks: 12,
+      date: '2003.04.05'
+    },
+    {
+      id: 'ssbm',
+      icon: 'smash',
+      game: 'Super Smash Bros. Melee',
+      desc: 'Trophy collection 214/290. All events cleared.',
+      blocks: 9,
+      date: '2004.01.17'
+    },
+    {
+      id: 'sunshine',
+      icon: 'sun',
+      game: 'Super Mario Sunshine',
+      desc: 'Shines 87/120. Blue coins 164/240.',
+      blocks: 8,
+      date: '2003.08.21'
+    },
+    {
+      id: 'mario-kart',
+      icon: 'wheel',
+      game: 'Mario Kart: Double Dash!!',
+      desc: 'All cups cleared. Mirror mode unlocked.',
+      blocks: 5,
+      date: '2003.11.02'
+    },
+    {
+      id: 'luigi',
+      icon: 'boo',
+      game: 'Luigi’s Mansion',
+      desc: 'Rank A mansion clear. All 50 Boos collected.',
+      blocks: 4,
+      date: '2002.12.09'
+    },
+    {
+      id: 'metroid',
+      icon: 'metroid',
+      game: 'Metroid Prime',
+      desc: '82% items collected. Phazon Mines complete.',
+      blocks: 10,
+      date: '2003.06.14'
+    },
+    {
+      id: 'pikmin',
+      icon: 'pikmin',
+      game: 'Pikmin 2',
+      desc: 'Treasure collection 174/201. Debt repaid.',
+      blocks: 7,
+      date: '2004.03.28'
+    }
+  ],
+
+  BackEnd: [
+    {
+      id: 'pokemon',
+      icon: 'leaf',
+      game: 'Pokémon Colosseum',
+      desc: 'Story complete. 46 Shadow Pokémon purified.',
+      blocks: 8,
+      date: '2004.07.11'
+    },
+    {
+      id: 'tales',
+      icon: 'exsphere',
+      game: 'Tales of Symphonia',
+      desc: 'Journey file — Flanoir route. 62 hours played.',
+      blocks: 11,
+      date: '2004.09.03'
+    },
+    {
+      id: 'fzero',
+      icon: 'falcon',
+      game: 'F-Zero GX',
+      desc: 'Story mode Chapter 9 complete. Master class unlocked.',
+      blocks: 6,
+      date: '2003.10.19'
+    },
+    {
+      id: 'sonic',
+      icon: 'sonic',
+      game: 'Sonic Adventure 2 Battle',
+      desc: 'Hero/Dark stories complete. 127 emblems.',
+      blocks: 7,
+      date: '2003.05.26'
+    },
+    {
+      id: 'zelda',
+      icon: 'rune',
+      game: 'The Legend of Zelda: Twilight Princess',
+      desc: 'Quest file — 54 Poe souls. Master Sword obtained.',
+      blocks: 12,
+      date: '2006.12.18'
+    },
+    {
+      id: 'dk',
+      icon: 'banana',
+      game: 'Donkey Konga',
+      desc: 'Jukebox collection — 38 songs unlocked.',
+      blocks: 4,
+      date: '2004.02.12'
+    },
+    {
+      id: 'starfox',
+      icon: 'arwing',
+      game: 'Star Fox Adventures',
+      desc: 'Thorntail Hollow complete. 71 Scarabs collected.',
+      blocks: 9,
+      date: '2002.11.24'
+    }
+  ]
+};
+
+
+/* ================= Alpine component ================= */
+function memcard(){
+  return {
+    /* ---------- State ---------- */
+    power: false,
+    activeSlot: 'FrontEnd',
+
+    slots: {
+      FrontEnd: { cap: 59 },
+      BackEnd: { cap: 59 }
+    },
+
+    saves: SAVES,
+
+    cursor: 0,
+    sel: null,
+
+    switching: false,
+    soundOn: true,
+
+    ring: {
+      show: false,
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0
+    },
+
+    dialog: null,
+
+    /* ---------- Computed values ---------- */
+    get files(){
+      return this.saves[this.activeSlot] || [];
+    },
+
+    get card(){
+      return {
+        label: `SLOT ${this.activeSlot}`
+      };
+    },
+
+    get free(){
+      return Math.max(
+        0,
+        this.slots[this.activeSlot].cap - this.blockSum(this.activeSlot)
+      );
+    },
+
+    /* ---------- Initialization ---------- */
+    init(){
+      this.$nextTick(() => {
+        this.updateSelection(false);
+      });
+
+      window.addEventListener('resize', () => {
+        this.$nextTick(() => this.updateRing());
+      });
+    },
+
+    /* ---------- Power ---------- */
+    powerOn(){
+      if(this.power) return;
+
+      this.power = true;
+
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.updateSelection(false);
+        }, 250);
+      });
+    },
+
+
+    /* ---------- Slot management ---------- */
+    switchSlot(slot){
+      if(slot === this.activeSlot) return;
+
+      this.switching = true;
+
+      setTimeout(() => {
+        this.activeSlot = slot;
+        this.cursor = 0;
+        this.sel = null;
+
+        this.switching = false;
+
+        this.$nextTick(() => {
+          this.updateSelection(false);
+        });
+      }, 180);
+    },
+
+    /* ---------- Block calculations ---------- */
+    blockSum(slot){
+      return (this.saves[slot] || []).reduce(
+        (sum, file) => sum + Number(file.blocks || 0),
+        0
+      );
+    },
+
+    meterCells(){
+      const cap = this.slots[this.activeSlot].cap;
+      const used = this.blockSum(this.activeSlot);
+
+      if(!cap) return 0;
+
+      return Math.round((used / cap) * 24);
+    },
+
+    /* ---------- Selection ---------- */
+    selectFile(index){
+      if(!this.files.length){
+        this.sel = null;
+        return;
+      }
+
+      index = Math.max(
+        0,
+        Math.min(index, this.files.length - 1)
+      );
+
+      this.cursor = index;
+      this.sel = this.files[index];
+
+      this.updateRing();
+    },
+
+    updateSelection(playSound = true){
+      if(!this.files.length){
+        this.sel = null;
+        this.ring.show = false;
+        return;
+      }
+
+      this.cursor = Math.max(
+        0,
+        Math.min(this.cursor, this.files.length - 1)
+      );
+
+      this.sel = this.files[this.cursor];
+
+      this.$nextTick(() => {
+        this.updateRing();
+      });
+
+    },
+
+    /* ---------- Mouse ---------- */
+    hoverTile(index){
+      if(index === this.cursor) return;
+
+      this.cursor = index;
+      this.sel = this.files[index];
+
+      this.updateRing();
+    },
+
+    clickTile(index){
+      this.cursor = index;
+      this.sel = this.files[index];
+
+      this.updateRing();
+    },
+
+    /* ---------- BIOS cursor ring ---------- */
+    updateRing(){
+      const grid = this.$refs.grid;
+
+      if(!grid || !this.files.length){
+        this.ring.show = false;
+        return;
+      }
+
+      const tiles = grid.querySelectorAll('[data-tile]');
+      const tile = tiles[this.cursor];
+
+      if(!tile){
+        this.ring.show = false;
+        return;
+      }
+
+      const gridRect = grid.getBoundingClientRect();
+      const tileRect = tile.getBoundingClientRect();
+
+      this.ring = {
+        show: true,
+        x: tileRect.left - gridRect.left,
+        y: tileRect.top - gridRect.top,
+        w: tileRect.width,
+        h: tileRect.height
+      };
+    },
+
+    /* ---------- Keyboard ---------- */
+    onKey(event){
+      if(!this.power){
+        if(event.key !== 'Tab'){
+          event.preventDefault();
+          this.powerOn();
+        }
+        return;
+      }
+
+      /* Dialog gets keyboard priority */
+      if(this.dialog){
+        if(event.key === 'Escape'){
+          event.preventDefault();
+          this.closeDialog();
+        }
+
+        if(event.key === 'Enter'){
+          event.preventDefault();
+
+          const primary = this.dialog.buttons.find(
+            b => b.kind === 'primary'
+          );
+
+          if(primary){
+            primary.fn();
+          }
+        }
+
+        return;
+      }
+
+      const key = event.key.toLowerCase();
+
+      if(
+        ['arrowleft','arrowright','arrowup','arrowdown',
+         'enter','delete','c','m','escape'].includes(key)
+      ){
+        event.preventDefault();
+      }
+
+      if(key === 'arrowleft'){
+        this.moveCursor(-1);
+      }
+
+      else if(key === 'arrowright'){
+        this.moveCursor(1);
+      }
+
+      else if(key === 'arrowup'){
+        this.moveCursor(-1);
+      }
+
+      else if(key === 'arrowdown'){
+        this.moveCursor(1);
+      }
+
+      else if(key === 'enter'){
+        if(this.files.length){
+          this.clickTile(this.cursor);
+        }
+      }
+
+      else if(key === 'c'){
+        if(this.sel){
+          this.requestCopy();
+        }
+      }
+
+      else if(key === 'm'){
+        if(this.sel){
+          this.requestMove();
+        }
+      }
+
+      else if(key === 'delete' || key === 'backspace'){
+        if(this.sel){
+          this.requestDelete();
+        }
+      }
+
+      else if(key === 'escape'){
+        this.sel = null;
+        this.ring.show = false;
+      }
+    },
+
+    moveCursor(delta){
+      if(!this.files.length) return;
+
+      const next =
+        (this.cursor + delta + this.files.length) %
+        this.files.length;
+
+      if(next === this.cursor) return;
+
+      this.cursor = next;
+      this.sel = this.files[this.cursor];
+
+      this.updateRing();
+    },
+
+    /* ---------- Copy ---------- */
+    requestCopy(){
+      if(!this.sel) return;
+
+      const file = this.sel;
+
+      const otherSlot =
+        this.activeSlot === 'A' ? 'B' : 'A';
+
+      const destinationFree =
+        this.slots[otherSlot].cap -
+        this.blockSum(otherSlot);
+
+      if(destinationFree < file.blocks){
+
+        this.dialog = {
+          icon: 'warn',
+          danger: true,
+          title: 'COPY FAILED',
+          body:
+            `SLOT ${otherSlot} does not have enough free blocks ` +
+            `for "${file.game}".`,
+          buttons: [
+            {
+              label: 'OK',
+              kind: 'primary',
+              fn: () => this.closeDialog()
+            }
+          ]
+        };
+
+        return;
+      }
+
+      this.dialog = {
+        icon: 'copy',
+        danger: false,
+        title: 'COPY SAVE?',
+        body:
+          `"${file.game}" will be copied from SLOT ${this.activeSlot} ` +
+          `to SLOT ${otherSlot}.`,
+        buttons: [
+          {
+            label: 'CANCEL',
+            kind: 'ghost',
+            fn: () => this.closeDialog()
+          },
+          {
+            label: 'COPY',
+            kind: 'primary',
+            fn: () => this.confirmCopy(otherSlot)
+          }
+        ]
+      };
+    },
+
+    confirmCopy(destination){
+      if(!this.sel) return;
+
+      const source = this.sel;
+
+      const copy = {
+        ...source,
+        id: `${source.id}-copy-${Date.now()}`
+      };
+
+      this.saves[destination].push(copy);
+
+      this.closeDialog();
+
+      this.dialog = {
+        icon: 'ok',
+        danger: false,
+        title: 'COPY COMPLETE',
+        body:
+          `"${source.game}" was copied to SLOT ${destination}.`,
+        buttons: [
+          {
+            label: 'OK',
+            kind: 'primary',
+            fn: () => this.closeDialog()
+          }
+        ]
+      };
+    },
+
+    /* ---------- Move ---------- */
+    requestMove(){
+      if(!this.sel) return;
+
+      const file = this.sel;
+
+      const otherSlot =
+        this.activeSlot === 'A' ? 'B' : 'A';
+
+      const destinationFree =
+        this.slots[otherSlot].cap -
+        this.blockSum(otherSlot);
+
+      if(destinationFree < file.blocks){
+
+        this.dialog = {
+          icon: 'warn',
+          danger: true,
+          title: 'MOVE FAILED',
+          body:
+            `SLOT ${otherSlot} does not have enough free blocks ` +
+            `for "${file.game}".`,
+          buttons: [
+            {
+              label: 'OK',
+              kind: 'primary',
+              fn: () => this.closeDialog()
+            }
+          ]
+        };
+
+        return;
+      }
+
+      this.dialog = {
+        icon: 'move',
+        danger: false,
+        title: 'MOVE SAVE?',
+        body:
+          `"${file.game}" will be moved from SLOT ${this.activeSlot} ` +
+          `to SLOT ${otherSlot}.`,
+        buttons: [
+          {
+            label: 'CANCEL',
+            kind: 'ghost',
+            fn: () => this.closeDialog()
+          },
+          {
+            label: 'MOVE',
+            kind: 'primary',
+            fn: () => this.confirmMove(otherSlot)
+          }
+        ]
+      };
+    },
+
+    confirmMove(destination){
+      if(!this.sel) return;
+
+      const source = this.sel;
+
+      this.saves[destination].push(source);
+
+      this.saves[this.activeSlot] =
+        this.saves[this.activeSlot].filter(
+          file => file.id !== source.id
+        );
+
+      this.cursor = Math.max(
+        0,
+        Math.min(
+          this.cursor,
+          this.saves[this.activeSlot].length - 1
+        )
+      );
+
+      this.closeDialog();
+
+      this.$nextTick(() => {
+        this.updateSelection(false);
+      });
+    },
+
+    /* ---------- Delete ---------- */
+    requestDelete(){
+      if(!this.sel) return;
+
+      const file = this.sel;
+
+      this.dialog = {
+        icon: 'trash',
+        danger: true,
+        title: 'DELETE SAVE?',
+        body:
+          `This will permanently erase "${file.game}" ` +
+          `from SLOT ${this.activeSlot}.`,
+        buttons: [
+          {
+            label: 'CANCEL',
+            kind: 'ghost',
+            fn: () => this.closeDialog()
+          },
+          {
+            label: 'DELETE',
+            kind: 'primary',
+            fn: () => this.confirmDelete()
+          }
+        ]
+      };
+    },
+
+    confirmDelete(){
+      if(!this.sel) return;
+
+      const deleted = this.sel;
+
+      this.saves[this.activeSlot] =
+        this.saves[this.activeSlot].filter(
+          file => file.id !== deleted.id
+        );
+
+      this.cursor = Math.max(
+        0,
+        Math.min(
+          this.cursor,
+          this.saves[this.activeSlot].length - 1
+        )
+      );
+
+      this.closeDialog();
+
+      this.$nextTick(() => {
+        this.updateSelection(false);
+
+        if(!this.files.length){
+          this.ring.show = false;
+        }
+      });
+    },
+
+    /* ---------- Dialogs ---------- */
+    closeDialog(){
+      this.dialog = null;
+    }
+  };
+}
+
+
+/* ================= Register Alpine component ================= */
+document.addEventListener('alpine:init', () => {
+  Alpine.data('memcard', memcard);
+});
+</script>

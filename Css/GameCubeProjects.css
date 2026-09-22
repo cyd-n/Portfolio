@@ -1,0 +1,107 @@
+  [x-cloak]{display:none!important}
+
+  body{
+    font-family:'Quicksand',sans-serif;
+    background:#0d0c24;
+    /* Glove hand cursor, like the original BIOS */
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><path d="M10 1.5c1.3 0 2.3 1 2.3 2.3v9.4l7.6 1.6c1.8.4 3 2 3 3.8 0 4.6-3 9.9-10.4 9.9-5.4 0-8.3-2.5-10.1-6L1 19.6c-.7-1.3-.2-2.9 1.1-3.6 1.1-.6 2.5-.3 3.3.7l1.3 1.7V3.8C6.7 2.5 7.7 1.5 9 1.5z" fill="%23ffffff" stroke="%23151527" stroke-width="1.6" stroke-linejoin="round"/></svg>') 10 2, auto;
+  }
+  button{cursor:inherit}
+
+  /* ---------- Save file tiles ---------- */
+  :root{--tile:112px}
+  @media (max-width:640px){:root{--tile:88px}}
+  @media (max-width:420px){:root{--tile:74px}}
+  .tile{
+    width:var(--tile);height:var(--tile);padding:16%;border-radius:26%;
+    background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+    transition:transform .16s ease, background .25s ease;
+  }
+  .tile:hover{transform:translateY(-3px) scale(1.05);background:rgba(255,255,255,.07)}
+  .tile:active{transform:scale(.94)}
+  .tile svg{width:100%;height:100%;display:block;overflow:visible}
+
+  /* ---------- Yellow BIOS cursor ring ---------- */
+  .cursor-ring{
+    position:absolute;top:0;left:0;z-index:10;pointer-events:none;
+    border:5px solid #ffd21e;border-radius:24px;
+    box-shadow:0 0 0 1.5px rgba(20,18,58,.5), 0 10px 24px -10px rgba(255,210,30,.4);
+    transition:transform .2s cubic-bezier(.3,1.5,.5,1), width .2s cubic-bezier(.3,1.5,.5,1), height .2s cubic-bezier(.3,1.5,.5,1);
+    animation:ringPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes ringPulse{
+    0%,100%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 24px -10px rgba(255,210,30,.3)}
+    50%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 30px -8px rgba(255,210,30,.55)}
+  }
+
+  /* ---------- Slot tabs / chips / buttons ---------- */
+  .tab{padding:.5rem .95rem;border-radius:14px;border:1px solid transparent;transition:all .2s;text-align:left;line-height:1.15}
+  .tab-on{background:#5b50b8;border-color:#7d71e0;color:#fff;box-shadow:0 8px 18px -8px rgba(91,80,184,.8), inset 0 1px 0 rgba(255,255,255,.25)}
+  .tab-off{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#8f8ac2}
+  .tab-off:hover{background:rgba(255,255,255,.08);color:#cfc9f2}
+
+  .chip{font-size:10px;font-weight:700;letter-spacing:.12em;padding:.25rem .5rem;border-radius:7px;background:rgba(255,255,255,.06);color:#a29dd0;border:1px solid rgba(255,255,255,.06)}
+  .actbtn{display:flex;align-items:center;gap:.4rem;padding:.5rem .85rem;border-radius:12px;font-size:13px;font-weight:700;letter-spacing:.04em;border:1px solid;transition:all .15s;background:transparent}
+  .act-copy{border-color:rgba(185,166,242,.3);color:#cfc6f5}
+  .act-copy:hover{background:#5b50b8;border-color:#5b50b8;color:#fff}
+  .act-del{border-color:rgba(255,84,112,.3);color:#ff8fa3}
+  .act-del:hover{background:#ff5470;border-color:#ff5470;color:#2b0810}
+
+  /* ---------- Dialogs ---------- */
+  .dlg-back{animation:fadeIn .18s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .dlg-panel{
+    background:#211e52;border:1px solid rgba(185,166,242,.28);border-radius:22px;
+    padding:1.7rem 2rem;max-width:26rem;width:100%;text-align:center;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.7);
+    animation:dlgIn .24s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes dlgIn{from{opacity:0;transform:scale(.88) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .dbtn{padding:.55rem 1.5rem;border-radius:12px;font-family:'Days One';font-size:.82rem;letter-spacing:.08em;transition:all .15s}
+  .dbtn-primary{background:#ffd21e;color:#241f08;box-shadow:0 6px 16px -6px rgba(255,210,30,.5)}
+  .dbtn-primary:hover{transform:translateY(-1px);background:#ffdd4d}
+  .dbtn-danger{background:#ff5470;color:#2b0810;box-shadow:0 6px 16px -6px rgba(255,84,112,.5)}
+  .dbtn-danger:hover{transform:translateY(-1px);background:#ff6d85}
+  .dbtn-ghost{background:rgba(255,255,255,.06);color:#cfc9f2;border:1px solid rgba(255,255,255,.12)}
+  .dbtn-ghost:hover{background:rgba(255,255,255,.12)}
+
+  /* ---------- Ambient background ---------- */
+  .dotgrid{
+    background-image:radial-gradient(rgba(185,166,242,.09) 1px, transparent 1.4px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+    mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+  }
+  .shape{position:absolute;border:2px solid rgba(185,166,242,.07);border-radius:26%;animation:drift linear infinite}
+  .shape.gold{border-color:rgba(255,210,30,.06)}
+  @keyframes drift{
+    0%{transform:rotate(0) translate(0,0)}
+    50%{transform:rotate(180deg) translate(26px,-22px)}
+    100%{transform:rotate(360deg) translate(0,0)}
+  }
+  .vignette{background:radial-gradient(115% 90% at 50% 8%, transparent 45%, rgba(4,3,14,.62) 100%)}
+
+  /* ---------- Boot screen ---------- */
+  .cube3d{animation:spin3d 7s linear infinite;transform-style:preserve-3d}
+  @keyframes spin3d{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+
+  /* ---------- Per-icon animations (each save file moves like the real BIOS) ---------- */
+  .a-flip,.a-punch,.a-rays,.a-roll,.a-float,.a-beat,.a-sway,.a-orbit,.a-hover{transform-box:fill-box;transform-origin:center}
+  .a-sway{transform-origin:50% 100%}
+  .a-flip{animation:flip 3s ease-in-out infinite}
+  .a-punch{animation:punch 1.7s ease-in-out infinite}
+  .a-rays{animation:spin360 10s linear infinite}
+  .a-roll{animation:spin360 1.6s linear infinite}
+  .a-orbit{animation:spin360 14s linear infinite}
+  .a-float{animation:floaty 2.6s ease-in-out infinite}
+  .a-hover{animation:floaty 2.1s ease-in-out infinite}
+  .a-beat{animation:beat 1.1s ease-in-out infinite}
+  .a-sway{animation:sway 3.2s ease-in-out infinite}
+  .a-dash{animation:dashy 1.4s ease-in-out infinite}
+  @keyframes flip{0%,100%{transform:scaleX(1)}50%{transform:scaleX(-1)}}
+  @keyframes punch{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.14) rotate(-6deg)}60%{transform:scale(.95) rotate(4deg)}}
+  @keyframes spin360{to{transform:rotate(360deg)}}
+  @keyframes floaty{0%,100%{transform:translateY(3px)}50%{transform:translateY(-4px)}}
+  @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.28);opacity:.7}}
+  @keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+  @keyframes dashy{0%,100%{opacity:.25}50%{opacity:.9}}
