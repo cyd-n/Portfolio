@@ -112,8 +112,14 @@
   <section class="flex-1 flex items-center justify-center py-8">
     <div class="w-full max-w-[960px]">
 
-    <div x-show="files.length" x-ref="grid"
-     class="relative grid grid-cols-[192px_192px_192px] justify-center w-full mx-auto gap-x-3 gap-y-8 transition-all duration-200"
+    <div x-show="files.length"
+     x-ref="grid"
+     class="relative grid grid-cols-3 gap-x-3 gap-y-8
+            w-fit max-w-full mx-auto
+            max-h-[620px]
+            overflow-y-auto overflow-x-hidden
+            pr-3
+            transition-all duration-200"
      :class="switching ? 'opacity-0 scale-[.97]' : 'opacity-100 scale-100'">
 
     <template x-for="(f,i) in files" :key="activeSlot + '-' + f.id">
@@ -378,6 +384,7 @@ const SAVES = {
       date: '2025'
     }
   ], 
+  
   Tools: [
     {
       id: '30',
@@ -552,7 +559,9 @@ function memcard(){
 
     slots: {
       FrontEnd: { cap: 59 },
-      BackEnd: { cap: 59 }
+      BackEnd: { cap: 59 },
+      Others: { cap: 59 },
+      Tools: { cap: 59 }
     },
 
     saves: SAVES,

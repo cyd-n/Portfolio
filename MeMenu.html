@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABOUT ME · MEMORY CARD (SLOT A)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Days+One&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+<style>
+  [x-cloak]{display:none!important}
+
+  body{
+    font-family:'Quicksand',sans-serif;
+    background:#0d0c24;
+    /* Glove hand cursor, like the original BIOS */
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><path d="M10 1.5c1.3 0 2.3 1 2.3 2.3v9.4l7.6 1.6c1.8.4 3 2 3 3.8 0 4.6-3 9.9-10.4 9.9-5.4 0-8.3-2.5-10.1-6L1 19.6c-.7-1.3-.2-2.9 1.1-3.6 1.1-.6 2.5-.3 3.3.7l1.3 1.7V3.8C6.7 2.5 7.7 1.5 9 1.5z" fill="%23ffffff" stroke="%23151527" stroke-width="1.6" stroke-linejoin="round"/></svg>') 10 2, auto;
+  }
+  button{cursor:inherit}
+
+  /* ---------- Save file tiles ---------- */
+  :root{--tile:112px}
+  @media (max-width:640px){:root{--tile:88px}}
+  @media (max-width:420px){:root{--tile:74px}}
+  .tile{
+    width:var(--tile);height:var(--tile);padding:16%;border-radius:26%;
+    background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+    transition:transform .16s ease, background .25s ease;
+  }
+  .tile:hover{transform:translateY(-3px) scale(1.05);background:rgba(255,255,255,.07)}
+  .tile:active{transform:scale(.94)}
+  .tile svg{width:100%;height:100%;display:block;overflow:visible}
+
+  /* ---------- Yellow BIOS cursor ring ---------- */
+  .cursor-ring{
+    position:absolute;top:0;left:0;z-index:10;pointer-events:none;
+    border:5px solid #ffd21e;border-radius:24px;
+    box-shadow:0 0 0 1.5px rgba(20,18,58,.5), 0 10px 24px -10px rgba(255,210,30,.4);
+    transition:transform .2s cubic-bezier(.3,1.5,.5,1), width .2s cubic-bezier(.3,1.5,.5,1), height .2s cubic-bezier(.3,1.5,.5,1);
+    animation:ringPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes ringPulse{
+    0%,100%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 24px -10px rgba(255,210,30,.3)}
+    50%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 30px -8px rgba(255,210,30,.55)}
+  }
+  /* ring show/hide + fade */
+  .cursor-ring{transition:transform .2s cubic-bezier(.3,1.5,.5,1),width .2s cubic-bezier(.3,1.5,.5,1),height .2s cubic-bezier(.3,1.5,.5,1),opacity .16s ease;opacity:0}
+  .cursor-ring.on{opacity:1}
+
+  /* ---------- Slot tabs / chips / buttons ---------- */
+  .tab{padding:.5rem .95rem;border-radius:14px;border:1px solid transparent;transition:all .2s;text-align:left;line-height:1.15}
+  .tab-on{background:#5b50b8;border-color:#7d71e0;color:#fff;box-shadow:0 8px 18px -8px rgba(91,80,184,.8), inset 0 1px 0 rgba(255,255,255,.25)}
+  .tab-off{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#8f8ac2}
+  .tab-off:hover{background:rgba(255,255,255,.08);color:#cfc9f2}
+
+  .chip{font-size:10px;font-weight:700;letter-spacing:.12em;padding:.25rem .5rem;border-radius:7px;background:rgba(255,255,255,.06);color:#a29dd0;border:1px solid rgba(255,255,255,.06)}
+  .actbtn{display:flex;align-items:center;gap:.4rem;padding:.5rem .85rem;border-radius:12px;font-size:13px;font-weight:700;letter-spacing:.04em;border:1px solid;transition:all .15s;background:transparent;font-family:'Quicksand',sans-serif}
+  .act-copy{border-color:rgba(185,166,242,.3);color:#cfc6f5}
+  .act-copy:hover{background:#5b50b8;border-color:#5b50b8;color:#fff}
+  .act-del{border-color:rgba(255,84,112,.3);color:#ff8fa3}
+  .act-del:hover{background:#ff5470;border-color:#ff5470;color:#2b0810}
+
+  /* ---------- Dialogs ---------- */
+  .dlg-back{animation:fadeIn .18s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .dlg-panel{
+    background:#211e52;border:1px solid rgba(185,166,242,.28);border-radius:22px;
+    padding:1.7rem 2rem;max-width:26rem;width:100%;text-align:center;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.7);
+    animation:dlgIn .24s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes dlgIn{from{opacity:0;transform:scale(.88) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .dbtn{padding:.55rem 1.5rem;border-radius:12px;font-family:'Days One';font-size:.82rem;letter-spacing:.08em;transition:all .15s;border:none}
+  .dbtn-primary{background:#ffd21e;color:#241f08;box-shadow:0 6px 16px -6px rgba(255,210,30,.5)}
+  .dbtn-primary:hover{transform:translateY(-1px);background:#ffdd4d}
+  .dbtn-danger{background:#ff5470;color:#2b0810;box-shadow:0 6px 16px -6px rgba(255,84,112,.5)}
+  .dbtn-danger:hover{transform:translateY(-1px);background:#ff6d85}
+  .dbtn-ghost{background:rgba(255,255,255,.06);color:#cfc9f2;border:1px solid rgba(255,255,255,.12)}
+  .dbtn-ghost:hover{background:rgba(255,255,255,.12)}
+
+  /* ---------- Ambient background ---------- */
+  .dotgrid{
+    background-image:radial-gradient(rgba(185,166,242,.09) 1px, transparent 1.4px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+    mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+  }
+  .shape{position:absolute;border:2px solid rgba(185,166,242,.07);border-radius:26%;animation:drift linear infinite}
+  .shape.gold{border-color:rgba(255,210,30,.06)}
+  @keyframes drift{
+    0%{transform:rotate(0) translate(0,0)}
+    50%{transform:rotate(180deg) translate(26px,-22px)}
+    100%{transform:rotate(360deg) translate(0,0)}
+  }
+  .vignette{background:radial-gradient(115% 90% at 50% 8%, transparent 45%, rgba(4,3,14,.62) 100%)}
+
+  /* ---------- Per-icon animations (each save file moves like the real BIOS) ---------- */
+  .a-flip,.a-punch,.a-rays,.a-roll,.a-float,.a-beat,.a-sway,.a-orbit,.a-hover{transform-box:fill-box;transform-origin:center}
+  .a-sway{transform-origin:50% 100%}
+  .a-flip{animation:flip 3s ease-in-out infinite}
+  .a-punch{animation:punch 1.7s ease-in-out infinite}
+  .a-rays{animation:spin360 10s linear infinite}
+  .a-roll{animation:spin360 1.6s linear infinite}
+  .a-orbit{animation:spin360 14s linear infinite}
+  .a-float{animation:floaty 2.6s ease-in-out infinite}
+  .a-hover{animation:floaty 2.1s ease-in-out infinite}
+  .a-beat{animation:beat 1.1s ease-in-out infinite}
+  .a-sway{animation:sway 3.2s ease-in-out infinite}
+  .a-dash{animation:dashy 1.4s ease-in-out infinite}
+  @keyframes flip{0%,100%{transform:scaleX(1)}50%{transform:scaleX(-1)}}
+  @keyframes punch{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.14) rotate(-6deg)}60%{transform:scale(.95) rotate(4deg)}}
+  @keyframes spin360{to{transform:rotate(360deg)}}
+  @keyframes floaty{0%,100%{transform:translateY(3px)}50%{transform:translateY(-4px)}}
+  @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.28);opacity:.7}}
+  @keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+  @keyframes dashy{0%,100%{opacity:.25}50%{opacity:.9}}
+
+  /* ---------- Page layout ---------- */
+  html{scrollbar-color:#4a4390 #14122e}
+  body{margin:0;min-height:100vh;overflow-x:hidden;color:#c9c3ec;padding-bottom:96px}
+  .bgfx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .bgfx .dotgrid,.bgfx .vignette{position:absolute;inset:0}
+  .page{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:1.6rem clamp(1.1rem,4vw,2rem) 7rem}
+
+  header{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:.95rem}
+  .logo{width:44px;height:44px;flex:none}
+  .brand h1{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:clamp(1.45rem,3.2vw,2rem);letter-spacing:.06em;color:#f2efff}
+  .brand p{margin:.2rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#8f8ac2}
+  .hnav{margin-left:auto;display:flex;gap:.55rem;flex-wrap:wrap}
+  .hnav .tab{display:inline-flex;align-items:center;text-decoration:none;font-family:'Quicksand',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.12em}
+
+  .stage{display:grid;grid-template-columns:minmax(0,1fr) 402px;gap:2.8rem;align-items:start;margin-top:2.4rem}
+  .cardzone{min-width:0}
+  .cardhead{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin:0 0 1.3rem}
+  .cardhead h2{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:1rem;letter-spacing:.14em;color:#e6e1ff}
+  .cardhead p{margin:.3rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.24em;color:#8f8ac2}
+  .freechip{background:rgba(255,210,30,.09);border-color:rgba(255,210,30,.28);color:#ffd21e}
+
+  .grid{position:relative;display:grid;grid-template-columns:repeat(4,var(--tile));gap:1.7rem 1.5rem;justify-content:center;padding:.6rem}
+  .slot{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+  .slot .tile{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+  .slot .tile:focus-visible{outline:2px solid rgba(255,210,30,.75);outline-offset:4px}
+  .slot.sel .tile{background:rgba(255,210,30,.09);border-color:rgba(255,210,30,.42)}
+  .tileface{display:block;width:100%;height:100%}
+  .tilelabel{font-size:9.5px;font-weight:700;letter-spacing:.14em;color:#7c77ab;transition:color .18s;white-space:nowrap}
+  .slot:hover .tilelabel,.slot.sel .tilelabel{color:#ffd21e}
+
+  /* ---------- Inspector (file detail) ---------- */
+  .inspector{position:sticky;top:1.4rem;background:#17153a;border:1px solid rgba(185,166,242,.2);border-radius:22px;padding:1.45rem 1.5rem 1.5rem;box-shadow:0 34px 70px -34px rgba(0,0,0,.7)}
+  .inshead{display:flex;align-items:center;gap:1rem}
+  .insicon{width:68px;height:68px;flex:none;padding:15%;border-radius:26%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09)}
+  .insicon svg{width:100%;height:100%;display:block;overflow:visible}
+  .insname{font-weight:700;font-size:1.02rem;color:#fff;letter-spacing:.02em}
+  .institle{margin-top:.32rem;font-size:9.5px;font-weight:700;letter-spacing:.2em;color:#8f8ac2}
+  .insmeta{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.05rem}
+  .chip-rw{color:#9be8b0;border-color:rgba(110,231,145,.25);background:rgba(110,231,145,.07)}
+  .insdiv{border-top:1px dashed rgba(185,166,242,.22);margin:1.05rem 0 1.1rem}
+  .insbody{min-height:15.5rem}
+  .reading{display:flex;align-items:center;justify-content:center;gap:.55rem;height:14rem;color:#8f8ac2;font-size:11px;font-weight:700;letter-spacing:.24em}
+  .insact{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.15rem;align-items:center}
+  .openbtn{font-size:.72rem;padding:.55rem 1.1rem;text-decoration:none;display:inline-flex;align-items:center;gap:.45rem;flex:none}
+  .openbtn svg{flex:none}
+
+  /* content inside the inspector body */
+  .insbody p{color:#c9c3ec;font-size:13.5px;line-height:1.7;margin:0 0 .8rem}
+  .insbody p.sub{color:#8f8ac2;font-size:12.5px}
+  .insbody .tagrow{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+  .footnote{font-size:11px!important;color:#6f6a9e!important;font-style:italic;margin-top:.9rem!important}
+  .skrow{display:grid;grid-template-columns:8.2rem 1fr;align-items:center;gap:.7rem;margin:.55rem 0}
+  .skname{font-size:10.5px;font-weight:700;letter-spacing:.12em;color:#a29dd0}
+  .skbar{display:flex;gap:3px}
+  .skbar i{flex:1;height:11px;border-radius:3px;background:rgba(255,255,255,.07)}
+  .skbar i.on{background:#ffd21e}
+  .tlrow{display:flex;gap:.9rem;margin:.85rem 0}
+  .tlyear{font-family:'Days One',sans-serif;font-size:.8rem;color:#ffd21e;min-width:3.1rem;padding-top:.15rem;letter-spacing:.04em}
+  .tlrow p{margin:0!important}
+  .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem .8rem;margin:.4rem 0 .6rem}
+  .stat b{display:block;font-family:'Days One',sans-serif;font-weight:400;font-size:1.65rem;color:#ffd21e;line-height:1.1}
+  .stat span{font-size:9.5px;font-weight:700;letter-spacing:.16em;color:#8f8ac2}
+  .nowrow{display:grid;grid-template-columns:6.2rem 1fr;gap:.8rem;margin:.62rem 0;align-items:baseline}
+  .nowlab{font-size:9.5px;font-weight:700;letter-spacing:.16em;color:#ffd21e}
+  .nowval{color:#c9c3ec;font-size:13.5px}
+  .maillink{display:inline-flex;align-items:center;gap:.45rem;font-weight:700;color:#fff;font-size:15px;text-decoration:none;border-bottom:2px solid rgba(255,210,30,.5);padding-bottom:2px;transition:color .15s,border-color .15s}
+  .maillink:hover{color:#ffd21e;border-color:#ffd21e}
+  .linkrow{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px dashed rgba(185,166,242,.18);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:.14em;color:#a29dd0;transition:color .15s}
+  .linkrow:hover{color:#ffd21e}
+  .linkrow svg{opacity:.6}
+
+  /* ---------- Bottom BIOS bar ---------- */
+  .biosbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:.95rem;background:#1d1a49;border:1px solid rgba(185,166,242,.28);border-radius:999px;padding:.6rem 1.35rem;box-shadow:0 18px 40px -18px rgba(0,0,0,.7);white-space:nowrap;max-width:calc(100vw - 1.4rem)}
+  .biosbar span{font-size:9.5px;font-weight:700;letter-spacing:.18em;color:#9d97cf}
+  .biosbar .led{width:8px;height:8px;border-radius:3px;background:#ffd21e;flex:none}
+  .biosbar .clock{font-family:'Days One',sans-serif;font-weight:400;font-size:11.5px;letter-spacing:.1em;color:#ffd21e}
+  .biosbar .sep{width:1px;height:13px;background:rgba(185,166,242,.3)}
+
+  /* ---------- Toast ---------- */
+  .toast{position:fixed;left:50%;bottom:76px;transform:translate(-50%,14px);z-index:60;display:flex;align-items:center;gap:.8rem;background:#ffd21e;color:#241f08;font-family:'Days One',sans-serif;font-size:.7rem;letter-spacing:.1em;padding:.65rem 1.15rem;border-radius:13px;box-shadow:0 16px 36px -12px rgba(255,210,30,.45);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .25s cubic-bezier(.3,1.4,.5,1)}
+  .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+  .toastbtn{background:none;border:none;font:inherit;color:#241f08;text-decoration:underline;text-underline-offset:3px;padding:0;letter-spacing:inherit}
+
+  /* ---------- Dialog extras ---------- */
+  .dlg-back{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:1.2rem;background:rgba(7,6,20,.66);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+  .dlgicon{width:58px;height:58px;margin:0 auto 1.05rem;border-radius:19px;display:grid;place-items:center;border:1px solid}
+  .dlgicon.ask{color:#ff8fa3;background:rgba(255,84,112,.08);border-color:rgba(255,84,112,.3)}
+  .dlgicon.no{color:#ffd21e;background:rgba(255,210,30,.08);border-color:rgba(255,210,30,.32);animation:deny .38s ease}
+  @keyframes deny{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+  .dlg-panel h3{margin:0 0 .55rem;font-family:'Days One',sans-serif;font-weight:400;font-size:1.12rem;letter-spacing:.08em;color:#fff}
+  .dlg-panel p{margin:0 auto 1.5rem;max-width:19rem;color:#b7b0e2;font-size:13px;line-height:1.65}
+  .dlg-panel p b{color:#ffd21e}
+  .fname{color:#ffd21e}
+  .dlgbtns{display:flex;justify-content:center;gap:.7rem}
+
+  @media(max-width:980px){.stage{grid-template-columns:1fr}.inspector{position:static}}
+  @media(max-width:640px){.grid{gap:1.3rem 1rem}.hnav{margin-left:0;width:100%}}
+  @media(max-width:480px){.biosbar{gap:.6rem;padding:.55rem .95rem}.biosbar .date,.biosbar .s1{display:none}}
+  @media(max-width:420px){.skrow{grid-template-columns:6.9rem 1fr}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body x-data="bios()">
+<noscript><div style="max-width:30rem;margin:20vh auto;text-align:center;font-weight:700;color:#8f8ac2">This memory card needs JavaScript to be read. Please enable it.</div></noscript>
+
+<!-- ambient background -->
+<div class="bgfx" aria-hidden="true">
+  <div class="dotgrid"></div>
+  <div class="shape" style="width:190px;height:190px;top:12%;left:7%;animation-duration:27s"></div>
+  <div class="shape gold" style="width:120px;height:120px;top:64%;left:14%;animation-duration:21s;animation-delay:-6s"></div>
+  <div class="shape" style="width:150px;height:150px;top:22%;right:9%;animation-duration:31s;animation-delay:-11s"></div>
+  <div class="shape gold" style="width:90px;height:90px;top:74%;right:18%;animation-duration:19s;animation-delay:-3s"></div>
+  <div class="shape" style="width:70px;height:70px;top:44%;left:44%;animation-duration:24s;animation-delay:-14s"></div>
+  <div class="shape" style="width:240px;height:240px;top:-60px;left:52%;animation-duration:36s;animation-delay:-8s"></div>
+  <div class="vignette"></div>
+</div>
+
+<div class="page" x-cloak>
+  <header>
+    <div class="brand">
+      <svg class="logo a-float" viewBox="0 0 48 48" fill="none" stroke="#ffd21e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M24 5.5 40 14v20L24 42.5 8 34V14Z"/><path d="M8 14l16 8.5L40 14"/><path d="M24 22.5V42.5"/>
+      </svg>
+      <div>
+        <h1>ABOUT ME</h1>
+        <p>MEMORY CARD · SLOT A · PLAYER 1</p>
+      </div>
+    </div>
+    <nav class="hnav" aria-label="Site">
+      <a class="tab tab-off" href="index.html">HOME</a>
+      <a class="tab tab-off" href="projects.html">PROJECTS</a>
+      <span class="tab tab-on" aria-current="page">ABOUT</span>
+    </nav>
+  </header>
+
+  <main class="stage">
+    <!-- the memory card -->
+    <section class="cardzone">
+      <div class="cardhead">
+        <div>
+          <h2>MEMORY CARD</h2>
+          <p>SLOT A · 59 BLOCKS</p>
+        </div>
+        <span class="chip freechip" x-text="freeBlocks + ' BLOCKS FREE'"></span>
+      </div>
+
+      <div class="grid" x-ref="grid" @mouseleave="ringBack()">
+        <template x-for="f in files" :key="f.id">
+          <div class="slot" :class="{sel: selectedId === f.id}">
+            <button type="button" class="tile" :data-id="f.id" :aria-label="'Open file ' + f.name"
+                    @click="select(f.id)" @mouseenter="ringTo($el)" @focus="ringTo($el)">
+              <span class="tileface" x-html="f.svg"></span>
+            </button>
+            <span class="tilelabel" x-text="f.name"></span>
+          </div>
+        </template>
+        <div class="cursor-ring" :class="{on: ring.visible}" :style="ringStyle" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- file inspector -->
+    <aside class="inspector" aria-live="polite">
+      <div class="inshead">
+        <div class="insicon" x-html="current.svg"></div>
+        <div>
+          <div class="insname" x-text="current.name"></div>
+          <div class="institle" x-text="current.title"></div>
+        </div>
+      </div>
+      <div class="insmeta">
+        <span class="chip" x-text="'SIZE · ' + String(current.size).padStart(2,'0') + ' BLOCKS'"></span>
+        <span class="chip" x-text="'UPD · ' + current.updated"></span>
+        <span class="chip" :class="current.readonly ? '' : 'chip-rw'" x-text="current.readonly ? 'READ-ONLY' : 'R/W'"></span>
+      </div>
+      <div class="insdiv"></div>
+
+      <div class="insbody">
+        <div class="reading" x-show="reading">READING DATA<span class="a-dash">•••</span></div>
+        <div x-show="!reading" x-html="current.body"></div>
+      </div>
+
+      <div class="insact">
+        <button type="button" class="actbtn act-copy" x-show="current.copyText" @click="copyCurrent()">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.8"/><path d="M3 10.5V3.8C3 2.8 3.8 2 4.8 2h6.7"/></svg>
+          COPY EMAIL
+        </button>
+        <a class="dbtn dbtn-primary openbtn" x-show="current.open" :href="current.open">
+          <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="1.6" fill="currentColor" stroke="none"/></svg>
+          OPEN SLOT B
+        </a>
+        <button type="button" class="actbtn act-del" @click="askDelete()">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4h11M6.5 4V2.9c0-.5.4-.9.9-.9h1.2c.5 0 .9.4.9.9V4M4.2 4l.6 9.1c0 .6.5 1 1.1 1h4.2c.6 0 1.1-.4 1.1-1L11.8 4"/></svg>
+          DELETE
+        </button>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<!-- BIOS bottom bar: live date + clock -->
+<footer class="biosbar" x-cloak>
+  <span class="led a-dash"></span>
+  <span x-text="'SLOT A · ' + files.length + ' FILES · ' + freeBlocks + ' BLK FREE'"></span>
+  <span class="sep s1"></span>
+  <span class="date" x-text="dateStr"></span>
+  <span class="sep"></span>
+  <span class="clock" x-text="clock"></span>
+</footer>
+
+<!-- toast -->
+<div class="toast" :class="{show: toast.on}" x-cloak role="status">
+  <span x-text="toast.msg"></span>
+  <button type="button" class="toastbtn" x-show="toast.undo" @click="undoDelete()">UNDO</button>
+</div>
+
+<!-- BIOS dialog -->
+<div class="dlg-back" x-show="dlg.open" x-cloak @click.self="dlg.open = false" @keydown.escape.window="dlg.open = false">
+  <div class="dlg-panel" role="dialog" aria-modal="true">
+    <template x-if="dlg.stage === 'ask'">
+      <div>
+        <div class="dlgicon ask">
+          <svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5h14M8 5.5V4.2c0-.7.5-1.2 1.2-1.2h1.6c.7 0 1.2.5 1.2 1.2v1.3"/><path d="M4.8 5.5 5.6 16c0 .9.7 1.5 1.6 1.5h5.6c.9 0 1.6-.6 1.6-1.5l.8-10.5"/><path d="M8.3 9v5M11.7 9v5"/></svg>
+        </div>
+        <h3>DELETE FILE?</h3>
+        <p>“<b class="fname" x-text="current?.name"></b>” will be erased from MEMORY CARD (Slot A).
+          <span x-show="current?.deletable">Doing so frees <b x-text="current?.size + ' blocks'"></b> of memory. This cannot be undone.</span>
+          <span x-show="!current?.deletable">This action cannot be undone.</span></p>
+        <div class="dlgbtns">
+          <button type="button" class="dbtn dbtn-ghost" @click="dlg.open = false">CANCEL</button>
+          <button type="button" class="dbtn dbtn-danger" @click="confirmDelete()">DELETE</button>
+        </div>
+      </div>
+    </template>
+    <template x-if="dlg.stage === 'denied'">
+      <div>
+        <div class="dlgicon no">
+          <svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="8.5" width="11" height="8" rx="2"/><path d="M7 8.5V6.5a3 3 0 0 1 6 0v2"/><circle cx="10" cy="12.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <h3>ACCESS DENIED</h3>
+        <p>This file is flagged <b>READ-ONLY</b> by the system. It's load-bearing personality — deleting it would void the whole portfolio.</p>
+        <div class="dlgbtns">
+          <button type="button" class="dbtn dbtn-primary" @click="dlg.open = false">OK</button>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<script>
+/* ---------- icon / content builders ---------- */
+const I = (cls, inner) =>
+  '<svg class="' + cls + '" viewBox="0 0 48 48" fill="none" stroke="#cfc9f2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+const bar   = n => { let s = '<span class="skbar">'; for (let i = 0; i < 10; i++) s += '<i class="' + (i < n ? 'on' : '') + '"></i>'; return s + '</span>'; };
+const skrow = (n, l) => '<div class="skrow"><span class="skname">' + n + '</span>' + bar(l) + '</div>';
+const nowrow = (l, v) => '<div class="nowrow"><span class="nowlab">' + l + '</span><span class="nowval">' + v + '</span></div>';
+const tlrow  = (y, t) => '<div class="tlrow"><span class="tlyear">' + y + '</span><p>' + t + '</p></div>';
+const arrow  = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13 13 3M6.5 3H13v6.5"/></svg>';
+
+/* ---------- ALL page content lives here — edit this to make it yours ---------- */
+const FILES = [
+  {
+    id: 'whoami', name: 'whoami.dat', size: 12, updated: '2025.06.14', readonly: true,
+    title: 'PLAYER 1 · THE HUMAN BEHIND THE CURSOR',
+    svg: I('a-float', '<circle cx="24" cy="16" r="7.5"/><path d="M10.5 41c1.3-9.6 6.6-14.2 13.5-14.2s12.2 4.6 13.5 14.2"/>'),
+    body: '<p>Frontend developer who treats the browser like a console: it should boot fast, hold 60fps, and hide a couple of cheats for the curious. I build interfaces that move with intent — typography first, motion as punctuation, zero filler.</p>'
+        + '<p class="sub">Currently shipping playful, production-grade web things for teams that sweat the details.</p>'
+        + '<div class="tagrow"><span class="chip">CLASS · FRONTEND DEV</span><span class="chip">LVL · 24</span><span class="chip">SPAWN · LISBON, PT</span></div>'
+  },
+  {
+    id: 'skills', name: 'skills.sav', size: 10, updated: '2025.05.30', readonly: true,
+    title: 'SKILL TREE · SAVED PROGRESS',
+    svg: I('a-rays', '<path d="M24 5.5 27.8 20.2 42.5 24 27.8 27.8 24 42.5 20.2 27.8 5.5 24 20.2 20.2Z" fill="#ffd21e" stroke="#0d0c24" stroke-width="2"/>'),
+    body: '<p>Every skill costs memory blocks. Some of these were expensive to unlock.</p>'
+        + skrow('JAVASCRIPT', 9) + skrow('CSS & MOTION', 9) + skrow('REACT / SVELTE', 8)
+        + skrow('UI DESIGN', 8) + skrow('NODE & APIS', 7) + skrow('WEBGL / SHADERS', 6)
+        + '<p class="footnote">Remaining capacity: stubbornness, mostly.</p>'
+  },
+  {
+    id: 'timeline', name: 'timeline.log', size: 6, updated: '2025.04.02', readonly: true,
+    title: 'SAVE HISTORY · HOW I GOT HERE',
+    svg: I('a-sway', '<circle cx="24" cy="27" r="13.5"/><path d="M24 27v-8.5m0 8.5 5.5 3.8"/><path d="M19.5 5.5h9M24 5.5v4.5"/>'),
+    body: tlrow('2018', 'Wrote my first script to cheat at a browser game. It worked. I was never the same.')
+        + tlrow('2020', 'First dev job. Shipped fast, broke faster, learned what code review is actually for.')
+        + tlrow('2022', 'Went independent. Found motion design somewhere in the middle and never looked back.')
+        + tlrow('NOW',  'Building interfaces that move, for people who notice.')
+  },
+  {
+    id: 'stats', name: 'stats.bin', size: 5, updated: '2025.06.01', readonly: true,
+    title: 'LIFETIME STATS · AUDITED',
+    svg: I('a-hover', '<path d="M9.5 40.5h29"/><rect x="13" y="26" width="6.4" height="11.5" rx="2.4" fill="#b9a6f2" stroke="none"/><rect x="21" y="18.5" width="6.4" height="19" rx="2.4" fill="#b9a6f2" stroke="none"/><rect x="29" y="10.5" width="6.4" height="27" rx="2.4" fill="#ffd21e" stroke="none"/>'),
+    body: '<div class="statgrid">'
+        + '<div class="stat"><b>07</b><span>YEARS IN</span></div>'
+        + '<div class="stat"><b>46</b><span>PROJECTS SHIPPED</span></div>'
+        + '<div class="stat"><b>31</b><span>CLIENTS HAPPY</span></div>'
+        + '<div class="stat"><b>01</b><span>JOYSTICK SACRIFICED</span></div>'
+        + '</div><p class="footnote">Figures verified by the memory card itself. Results may wobble.</p>'
+  },
+  {
+    id: 'now', name: 'now.tmp', size: 4, updated: 'TODAY', readonly: false, deletable: true,
+    title: 'RAM DUMP · LIVE STATUS',
+    svg: I('a-flip', '<path d="M24 8.5V22"/><path d="M15 14.8a13.2 13.2 0 1 0 18 0"/>'),
+    body: nowrow('PLAYING', 'Wind Waker — fourth run')
+        + nowrow('LEARNING', 'GLSL, one shader at a time')
+        + nowrow('LISTENING', 'Jazz + rain on loop')
+        + nowrow('BASED', 'Lisbon, PT · UTC+0')
+        + nowrow('STATUS', 'Open for freelance')
+        + '<p class="footnote">It\u2019s a .tmp file — you can actually delete this one. I dare you.</p>'
+  },
+  {
+    id: 'contact', name: 'contact.cfg', size: 3, updated: '2025.03.18', readonly: true,
+    copyText: 'hello@playerone.dev', /* <- your real email here */
+    title: 'COMMS CONFIG · OPEN CHANNEL',
+    svg: I('a-punch', '<rect x="9.5" y="13.5" width="29" height="22" rx="5"/><path d="M11 16.8 24 26.8 37 16.8"/>'),
+    body: '<a class="maillink" href="mailto:hello@playerone.dev">hello@playerone.dev ' + arrow + '</a>'
+        + '<p class="sub">Fastest route. Hit COPY below — the address lands on your clipboard.</p>'
+        + '<a class="linkrow" href="https://github.com/your-handle" target="_blank" rel="noopener">GITHUB' + arrow + '</a>'
+        + '<a class="linkrow" href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener">LINKEDIN' + arrow + '</a>'
+        + '<div class="tagrow"><span class="chip">RESPONSE · &lt; 24H</span><span class="chip">TZ · UTC+0</span></div>'
+  },
+  {
+    id: 'projects', name: 'projects.gci', size: 2, updated: '2025.06.10', readonly: true,
+    open: 'projects.html', /* <- your existing projects page */
+    title: 'CROSS-LINK · SLOT B DATA',
+    svg: I('a-orbit', '<circle cx="24" cy="24" r="15.5" fill="#262158"/><circle cx="24" cy="24" r="9.5" stroke="#4a4390" stroke-width="1.6"/><circle cx="24" cy="24" r="4.2" fill="#ffd21e" stroke="#0d0c24" stroke-width="2"/><path d="M12.8 19.5a12.5 12.5 0 0 1 6-6.4" stroke="#8f86c9" stroke-width="2.4"/>'),
+    body: '<p>All shipped work lives on a separate card. Slot B holds the project files — case studies, experiments, and a couple of things I probably should have deleted.</p>'
+        + '<div class="tagrow"><span class="chip">SLOT B</span><span class="chip">46 FILES</span><span class="chip">100% SHIPPED</span></div>'
+        + '<p class="sub" style="margin-top:1rem">Use the button below to jump straight there.</p>'
+  },
+  {
+    id: 'favorites', name: 'favorites.gci', size: 7, updated: '2025.02.11', readonly: true,
+    title: 'SIDE QUESTS · MISCELLANEOUS',
+    svg: I('a-beat', '<path d="M24 40C12 31.5 8 22 13.5 16.5 17 13 22 14 24 18c2-4 7-5 10.5-1.5C40 22 36 31.5 24 40Z" fill="#ff5470" stroke="#0d0c24" stroke-width="2"/>'),
+    body: nowrow('GAME', 'Wind Waker — can you tell')
+        + nowrow('KEYCAP', 'Purple Esc, heavily used')
+        + nowrow('FONT PAIR', 'One rounded, one loud')
+        + nowrow('MOTTO', 'Ship it, then polish it')
+  }
+];
+const TOTAL_BLOCKS = 59;
+
+/* ---------- BIOS application state ---------- */
+function bios() {
+  return {
+    files: FILES.slice(),
+    freeBlocks: TOTAL_BLOCKS - FILES.reduce((a, f) => a + f.size, 0),
+    selectedId: 'whoami',
+    ring: { x: 0, y: 0, w: 0, h: 0, rad: 26, visible: false },
+    reading: false, readingTimer: null,
+    toast: { on: false, msg: '', undo: false }, toastTimer: null,
+    dlg: { open: false, stage: 'ask' },
+    clock: '', dateStr: '',
+    lastDeleted: null, ringId: null, ac: null,
+
+    get current() { return this.files.find(f => f.id === this.selectedId) || this.files[0]; },
+    get ringStyle() {
+      const r = this.ring;
+      return 'transform:translate(' + r.x + 'px,' + r.y + 'px);width:' + r.w + 'px;height:' + r.h
+           + 'px;border-radius:' + r.rad + 'px;opacity:' + (r.visible ? 1 : 0);
+    },
+
+    init() {
+      this.tick();
+      setInterval(() => this.tick(), 1000);
+      window.addEventListener('resize', () => {
+        if (this.ring.visible) { const el = this.tileEl(this.ringId); if (el) this.ringTo(el); }
+      });
+    },
+
+    tick() {
+      const d = new Date();
+      this.clock = d.toLocaleTimeString('en-GB', { hour12: false });
+      this.dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: '2-digit' }).toUpperCase().replace(/,/g, '');
+    },
+
+    tileEl(id) { return this.$refs.grid ? this.$refs.grid.querySelector('[data-id="' + id + '"]') : null; },
+
+    /* yellow cursor ring snaps to the tile (measured on the un-transformed slot) */
+    ringTo(el) {
+      if (!el || !this.$refs.grid) return;
+      const slot = el.closest('.slot') || el;
+      const g = this.$refs.grid.getBoundingClientRect(), r = slot.getBoundingClientRect();
+      this.ringId = el.dataset.id;
+      this.ring = { x: r.left - g.left, y: r.top - g.top, w: r.width, h: r.width,
+                    rad: parseFloat(getComputedStyle(el).borderRadius) || 26, visible: true };
+    },
+    ringBack() { const el = this.tileEl(this.selectedId); if (el) this.ringTo(el); },
+
+    select(id) {
+      this.selectedId = id;
+      this.blip(940, .06);
+      clearTimeout(this.readingTimer);
+      this.reading = true;                                  // "READING DATA •••"
+      this.readingTimer = setTimeout(() => this.reading = false, 300);
+      this.$nextTick(() => { const el = this.tileEl(id); if (el) this.ringTo(el); });
+    },
+
+    async copyCurrent() {
+      const t = this.current.copyText; if (!t) return;
+      try { await navigator.clipboard.writeText(t); }
+      catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = t; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (_) {}
+        ta.remove();
+      }
+      this.blip(1180, .05);
+      this.showToast('EMAIL COPIED TO CLIPBOARD');
+    },
+
+    askDelete() { this.dlg = { open: true, stage: 'ask' }; this.blip(620, .05); },
+
+    confirmDelete() {
+      const f = this.current;
+      if (f.deletable) {
+        const idx = this.files.findIndex(x => x.id === f.id);
+        this.lastDeleted = { file: f, index: idx };
+        this.files = this.files.filter(x => x.id !== f.id);
+        this.freeBlocks += f.size;
+        this.dlg.open = false;
+        this.selectedId = 'whoami';
+        this.blip(392, .09); setTimeout(() => this.blip(262, .12), 90);
+        this.showToast(f.name + ' DELETED · +' + f.size + ' BLOCKS FREE', true);
+        setTimeout(() => { const el = this.tileEl('whoami'); if (el) this.ringTo(el); }, 60);
+      } else {
+        this.dlg.stage = 'denied';
+        this.blip(196, .16); setTimeout(() => this.blip(155, .2), 120);
+      }
+    },
+
+    undoDelete() {
+      if (!this.lastDeleted) return;
+      const { file, index } = this.lastDeleted;
+      this.files.splice(Math.min(index, this.files.length), 0, file);
+      this.freeBlocks -= file.size;
+      this.lastDeleted = null; this.toast.on = false;
+      this.blip(784, .07);
+    },
+
+    showToast(msg, undo = false) {
+      this.toast = { on: true, msg, undo };
+      clearTimeout(this.toastTimer);
+      this.toastTimer = setTimeout(() => this.toast.on = false, 3400);
+    },
+
+    /* tiny menu blip, synthesized — no audio files */
+    blip(freq = 880, dur = .07) {
+      try {
+        this.ac = this.ac || new (window.AudioContext || window.webkitAudioContext)();
+        const o = this.ac.createOscillator(), g = this.ac.createGain();
+        o.type = 'square'; o.frequency.value = freq;
+        g.gain.setValueAtTime(.035, this.ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(.0001, this.ac.currentTime + dur);
+        o.connect(g); g.connect(this.ac.destination);
+        o.start(); o.stop(this.ac.currentTime + dur);
+      } catch (e) {}
+    }
+  };
+}
+</script>
+</body>
+</html>
