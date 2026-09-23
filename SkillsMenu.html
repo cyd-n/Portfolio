@@ -23,7 +23,7 @@
 </head>
 
 <body class="bg-gcbg text-ink min-h-screen select-none antialiased"
-      x-data="memcard()" @keydown.window="onKey($event)">
+      x-data="memcard()">
 
 <!-- ============ Ambient background: drifting wireframe cubes ============ -->
 <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -34,29 +34,6 @@
   <div class="shape gold" style="width:220px;height:220px;bottom:-60px;right:22%;animation-duration:38s"></div>
   <div class="shape" style="width:150px;height:150px;top:12%;left:38%;animation-duration:55s;animation-direction:reverse"></div>
   <div class="absolute inset-0 vignette"></div>
-</div>
-
-<!-- ============ Boot screen (also unlocks WebAudio on first click) ============ -->
-<div x-cloak x-show="!power" @click="powerOn()"
-     class="fixed inset-0 z-[60] bg-[#05050f] grid place-items-center transition-opacity duration-700"
-     :class="power ? 'opacity-0 pointer-events-none' : 'opacity-100'">
-  <div class="text-center px-6" style="perspective:700px">
-    <div class="cube3d mx-auto" style="width:88px;height:88px">
-      <svg viewBox="0 0 64 64" fill="none" stroke="#b9a6f2" stroke-width="2" stroke-linejoin="round" class="w-full h-full">
-        <path d="M32 6 54 18v24L32 54 10 42V18z"/><path d="M10 18l22 12 22-12M32 30v24"/>
-      </svg>
-    </div>
-    <div class="font-display text-2xl tracking-[.4em] mt-7 text-white">Quidon<span class="text-lav">Roethof</span></div>
-    <div class="text-[10px] tracking-[.45em] text-faint mt-2">Profolio</div>
-    <button @click.stop="powerOn()"
-            class="mt-12 w-20 h-20 rounded-full border-2 border-lav/40 grid place-items-center mx-auto relative hover:border-gold transition-colors">
-      <span class="absolute inset-0 rounded-full border border-lav/30 animate-ping" style="animation-duration:2.4s"></span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-8 h-8 text-lav">
-        <path d="M12 3v9"/><path d="M17.5 6.5a8 8 0 1 1-11 0"/>
-      </svg>
-    </button>
-    <div class="mt-5 text-[11px] tracking-[.35em] text-faint">PRESS POWER OR ANY KEY</div>
-  </div>
 </div>
 
 <!-- ============ Main menu ============ -->
@@ -163,6 +140,7 @@
           <div class="flex gap-2 mt-2">
             <span class="chip" x-text="sel.blocks + ' BLOCKS'"></span>
             <span class="chip" x-text="sel.date"></span>
+            <span class="chip" x-text="sel.skillLevel"></span>
             <span class="chip" x-text="(cursor+1) + ' / ' + files.length"></span>
           </div>
         </div>
@@ -210,6 +188,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
       lang: 'HTML',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 12,
       date: '2023'
     },
@@ -218,6 +197,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
       lang: 'CSS',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2023'
     },
@@ -226,6 +206,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
       lang: 'Js',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 8,
       date: '2025'
     },
@@ -234,6 +215,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/alpinejs/alpinejs-original.svg',
       lang: 'AlpineJs',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 5,
       date: '2025'
     },
@@ -241,6 +223,7 @@ const SAVES = {
       id: '4',
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
       lang: 'Vue',
+      skillLevel : 'Begginer',
       desc: '',
       blocks: 4,
       date: '2025'
@@ -253,6 +236,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',
       lang: 'C#',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 8,
       date: '2020'
     },
@@ -261,6 +245,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
       lang: 'Java',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 6,
       date: '2026'
     },
@@ -269,6 +254,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
       lang: 'Python',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 12,
       date: '2024'
     },
@@ -276,6 +262,7 @@ const SAVES = {
       id: '8',
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
       lang: 'PHP',
+      skillLevel : 'Intermaite',
       desc: '',
       blocks: 7,
       date: '2024'
@@ -284,6 +271,7 @@ const SAVES = {
       id: '9',
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
       lang: 'NodeJs',
+      skillLevel : 'Intermaite',
       desc: '',
       blocks: 12,
       date: '2026'
@@ -292,6 +280,7 @@ const SAVES = {
       id: '10',
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg',
       lang: 'ASP.NET Core',
+      skillLevel : 'Junior',
       desc: '',
       date: '2026'
     },
@@ -299,6 +288,7 @@ const SAVES = {
       id: '11',
       icon: 'https://cdn.simpleicons.org/dbeaver',
       lang: 'DBeaver',
+      skillLevel : 'Junior',
       desc: '',
       date: '2026'
     },
@@ -306,6 +296,7 @@ const SAVES = {
       id: '12',
       icon: '',
       lang: 'PhpMyAdmin',
+      skillLevel : 'Intermaite',
       desc: '',
       date: '2024'
     },
@@ -313,6 +304,7 @@ const SAVES = {
       id: '13',
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mariadb/mariadb-original.svg',
       lang: 'MariaDB',
+      skillLevel : 'Junior',
       desc: '',
       date: '2024'
     }
@@ -324,6 +316,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
       lang: 'C++',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 3,
       date: '2024'
     },
@@ -332,6 +325,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg',
       lang: 'Rust',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 4,
       date: '2025'
     },
@@ -340,6 +334,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg',
       lang: 'Lua',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 6,
       date: '2023'
     },
@@ -348,6 +343,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg',
       lang: '.Net',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 13,
       date: '2024'
     },
@@ -356,6 +352,7 @@ const SAVES = {
       icon: 'https://cdn.simpleicons.org/dotnet',
       lang: 'WinForms',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 12,
       date: '2022'
     },
@@ -364,6 +361,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg',
       lang: 'Unity',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 4,
       date: '2021'
     },
@@ -372,6 +370,7 @@ const SAVES = {
       icon: 'https://cdn.simpleicons.org/love',
       lang: 'LOVE2D',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2023'
     },
@@ -380,6 +379,7 @@ const SAVES = {
       icon: 'https://cdn.simpleicons.org/sfml',
       lang: 'SFML',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2025'
     }
@@ -391,6 +391,7 @@ const SAVES = {
       icon: 'https://cdn.simpleicons.org/linux/FFFFFF', // dont work
       lang: 'WSL',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 3,
       date: '2025'
     },
@@ -399,6 +400,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',
       lang: 'VS Code',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 4,
       date: '2023'
     },
@@ -407,6 +409,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visualstudio/visualstudio-plain.svg',
       lang: 'Visual Stuidio',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 6,
       date: '2021'
     },
@@ -415,6 +418,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jetbrains/jetbrains-original.svg',
       lang: 'JetBrains Rider',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 13,
       date: '2026'
     },
@@ -423,6 +427,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg',
       lang: 'JetBrains IntelliJ',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 12,
       date: '2026'
     },
@@ -431,6 +436,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuget/nuget-original.svg',
       lang: 'NuGet',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 4,
       date: '2024'
     },
@@ -439,6 +445,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
       lang: 'GitHub',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2024'
     },
@@ -447,6 +454,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
       lang: 'Git',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2025'
     },
@@ -455,6 +463,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
       lang: 'Postman',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2025'
     },
@@ -463,6 +472,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/npm/npm-original-wordmark.svg',
       lang: 'Npm',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 9,
       date: '2026'
     },
@@ -471,6 +481,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
       lang: 'Docker',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2026'
     },
@@ -479,6 +490,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg',
       lang: 'Cargo',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 9,
       date: '2025'
     },
@@ -487,6 +499,7 @@ const SAVES = {
       icon: 'https://cdn.simpleicons.org/neovim',
       lang: 'NeoVim',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2025'
     },
@@ -495,6 +508,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
       lang: 'Linux',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2023'
     },
@@ -503,6 +517,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg',
       lang: 'Window(xp, visa, 7, 8, 10, 11)',
       desc: "don't ask why I have used a Windows version older then me and yess that is also the order in which i have use windows" ,
+      skillLevel : 'Intermaite',
       blocks: 9,
       date: '2012'
     },
@@ -511,6 +526,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg',
       lang: 'Android',
       desc: '',
+      skillLevel : 'Intermaite',
       blocks: 9,
       date: '2016'
     },
@@ -519,6 +535,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-plain.svg',
       lang: 'Ubuntu',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2023'
     },
@@ -527,6 +544,7 @@ const SAVES = {
       icon: 'https://cdn.simpleicons.org/linuxmint',
       lang: 'Linux Mint',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2024'
     },
@@ -535,6 +553,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg',
       lang: 'Arch',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2026'
     },
@@ -543,6 +562,7 @@ const SAVES = {
       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg',
       lang: 'Debain',
       desc: '',
+      skillLevel : 'Junior',
       blocks: 9,
       date: '2026'
     }
@@ -554,7 +574,7 @@ const SAVES = {
 function memcard(){
   return {
     /* ---------- State ---------- */
-    power: false,
+    power: true,
     activeSlot: 'FrontEnd',
 
     slots: {
@@ -610,20 +630,6 @@ function memcard(){
         this.$nextTick(() => this.updateRing());
       });
     },
-
-    /* ---------- Power ---------- */
-    powerOn(){
-      if(this.power) return;
-
-      this.power = true;
-
-      this.$nextTick(() => {
-        setTimeout(() => {
-          this.updateSelection(false);
-        }, 250);
-      });
-    },
-
 
     /* ---------- Slot management ---------- */
     switchSlot(slot){
@@ -743,93 +749,6 @@ function memcard(){
         w: tileRect.width,
         h: tileRect.height
       };
-    },
-
-    /* ---------- Keyboard ---------- */
-    onKey(event){
-      if(!this.power){
-        if(event.key !== 'Tab'){
-          event.preventDefault();
-          this.powerOn();
-        }
-        return;
-      }
-
-      /* Dialog gets keyboard priority */
-      if(this.dialog){
-        if(event.key === 'Escape'){
-          event.preventDefault();
-          this.closeDialog();
-        }
-
-        if(event.key === 'Enter'){
-          event.preventDefault();
-
-          const primary = this.dialog.buttons.find(
-            b => b.kind === 'primary'
-          );
-
-          if(primary){
-            primary.fn();
-          }
-        }
-
-        return;
-      }
-
-      const key = event.key.toLowerCase();
-
-      if(
-        ['arrowleft','arrowright','arrowup','arrowdown',
-         'enter','delete','c','m','escape'].includes(key)
-      ){
-        event.preventDefault();
-      }
-
-      if(key === 'arrowleft'){
-        this.moveCursor(-1);
-      }
-
-      else if(key === 'arrowright'){
-        this.moveCursor(1);
-      }
-
-      else if(key === 'arrowup'){
-        this.moveCursor(-1);
-      }
-
-      else if(key === 'arrowdown'){
-        this.moveCursor(1);
-      }
-
-      else if(key === 'enter'){
-        if(this.files.length){
-          this.clickTile(this.cursor);
-        }
-      }
-
-      else if(key === 'c'){
-        if(this.sel){
-          this.requestCopy();
-        }
-      }
-
-      else if(key === 'm'){
-        if(this.sel){
-          this.requestMove();
-        }
-      }
-
-      else if(key === 'delete' || key === 'backspace'){
-        if(this.sel){
-          this.requestDelete();
-        }
-      }
-
-      else if(key === 'escape'){
-        this.sel = null;
-        this.ring.show = false;
-      }
     },
 
     moveCursor(delta){

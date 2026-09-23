@@ -1,4 +1,4 @@
-  [x-cloak]{display:none!important}
+[x-cloak]{display:none!important}
 
   body{
     font-family:'Quicksand',sans-serif;
@@ -6,27 +6,14 @@
     /* Glove hand cursor, like the original BIOS */
     cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><path d="M10 1.5c1.3 0 2.3 1 2.3 2.3v9.4l7.6 1.6c1.8.4 3 2 3 3.8 0 4.6-3 9.9-10.4 9.9-5.4 0-8.3-2.5-10.1-6L1 19.6c-.7-1.3-.2-2.9 1.1-3.6 1.1-.6 2.5-.3 3.3.7l1.3 1.7V3.8C6.7 2.5 7.7 1.5 9 1.5z" fill="%23ffffff" stroke="%23151527" stroke-width="1.6" stroke-linejoin="round"/></svg>') 10 2, auto;
   }
-  button{cursor:inherit}
-
-  /* ---------- Save file tiles ---------- */
-  :root{--tile:112px}
-  @media (max-width:640px){:root{--tile:88px}}
-  @media (max-width:420px){:root{--tile:74px}}
-  .tile{
-    width:var(--tile);height:var(--tile);padding:16%;border-radius:26%;
-    background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-    transition:transform .16s ease, background .25s ease;
-  }
-  .tile:hover{transform:translateY(-3px) scale(1.05);background:rgba(255,255,255,.07)}
-  .tile:active{transform:scale(.94)}
-  .tile svg{width:100%;height:100%;display:block;overflow:visible}
+  button{cursor:inherit;font-family:'Quicksand',sans-serif}
 
   /* ---------- Yellow BIOS cursor ring ---------- */
   .cursor-ring{
-    position:absolute;top:0;left:0;z-index:10;pointer-events:none;
-    border:5px solid #ffd21e;border-radius:24px;
+    position:absolute;top:0;left:0;z-index:10;pointer-events:none;opacity:0;
+    border:5px solid #ffd21e;border-radius:16px;
     box-shadow:0 0 0 1.5px rgba(20,18,58,.5), 0 10px 24px -10px rgba(255,210,30,.4);
-    transition:transform .2s cubic-bezier(.3,1.5,.5,1), width .2s cubic-bezier(.3,1.5,.5,1), height .2s cubic-bezier(.3,1.5,.5,1);
+    transition:transform .2s cubic-bezier(.3,1.5,.5,1), width .2s cubic-bezier(.3,1.5,.5,1), height .2s cubic-bezier(.3,1.5,.5,1), opacity .16s ease;
     animation:ringPulse 2.2s ease-in-out infinite;
   }
   @keyframes ringPulse{
@@ -34,38 +21,28 @@
     50%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 30px -8px rgba(255,210,30,.55)}
   }
 
-  /* ---------- Slot tabs / chips / buttons ---------- */
+  /* ---------- Chips / buttons / tabs ---------- */
+  .chip{font-size:10px;font-weight:700;letter-spacing:.12em;padding:.25rem .5rem;border-radius:7px;background:rgba(255,255,255,.06);color:#a29dd0;border:1px solid rgba(255,255,255,.06)}
   .tab{padding:.5rem .95rem;border-radius:14px;border:1px solid transparent;transition:all .2s;text-align:left;line-height:1.15}
   .tab-on{background:#5b50b8;border-color:#7d71e0;color:#fff;box-shadow:0 8px 18px -8px rgba(91,80,184,.8), inset 0 1px 0 rgba(255,255,255,.25)}
   .tab-off{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#8f8ac2}
   .tab-off:hover{background:rgba(255,255,255,.08);color:#cfc9f2}
-
-  .chip{font-size:10px;font-weight:700;letter-spacing:.12em;padding:.25rem .5rem;border-radius:7px;background:rgba(255,255,255,.06);color:#a29dd0;border:1px solid rgba(255,255,255,.06)}
   .actbtn{display:flex;align-items:center;gap:.4rem;padding:.5rem .85rem;border-radius:12px;font-size:13px;font-weight:700;letter-spacing:.04em;border:1px solid;transition:all .15s;background:transparent}
   .act-copy{border-color:rgba(185,166,242,.3);color:#cfc6f5}
   .act-copy:hover{background:#5b50b8;border-color:#5b50b8;color:#fff}
-  .act-del{border-color:rgba(255,84,112,.3);color:#ff8fa3}
-  .act-del:hover{background:#ff5470;border-color:#ff5470;color:#2b0810}
 
-  /* ---------- Dialogs ---------- */
-  .dlg-back{animation:fadeIn .18s ease}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  .dlg-panel{
-    background:#211e52;border:1px solid rgba(185,166,242,.28);border-radius:22px;
-    padding:1.7rem 2rem;max-width:26rem;width:100%;text-align:center;
-    box-shadow:0 40px 80px -20px rgba(0,0,0,.7);
-    animation:dlgIn .24s cubic-bezier(.34,1.56,.64,1);
-  }
-  @keyframes dlgIn{from{opacity:0;transform:scale(.88) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
-  .dbtn{padding:.55rem 1.5rem;border-radius:12px;font-family:'Days One';font-size:.82rem;letter-spacing:.08em;transition:all .15s}
+  .dbtn{padding:.55rem 1.5rem;border-radius:12px;font-family:'Days One';font-size:.8rem;letter-spacing:.08em;transition:all .15s;border:none}
   .dbtn-primary{background:#ffd21e;color:#241f08;box-shadow:0 6px 16px -6px rgba(255,210,30,.5)}
   .dbtn-primary:hover{transform:translateY(-1px);background:#ffdd4d}
-  .dbtn-danger{background:#ff5470;color:#2b0810;box-shadow:0 6px 16px -6px rgba(255,84,112,.5)}
-  .dbtn-danger:hover{transform:translateY(-1px);background:#ff6d85}
   .dbtn-ghost{background:rgba(255,255,255,.06);color:#cfc9f2;border:1px solid rgba(255,255,255,.12)}
   .dbtn-ghost:hover{background:rgba(255,255,255,.12)}
+  .sndbtns{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
 
-  /* ---------- Ambient background ---------- */
+  /* ---------- Toast ---------- */
+  .toast{position:fixed;left:50%;bottom:76px;transform:translate(-50%,14px);z-index:60;display:flex;align-items:center;gap:.8rem;background:#ffd21e;color:#241f08;font-family:'Days One',sans-serif;font-size:.7rem;letter-spacing:.1em;padding:.65rem 1.15rem;border-radius:13px;box-shadow:0 16px 36px -12px rgba(255,210,30,.45);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .25s cubic-bezier(.3,1.4,.5,1);white-space:nowrap}
+  .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+
+  /* ---------- Ambient background (your original) ---------- */
   .dotgrid{
     background-image:radial-gradient(rgba(185,166,242,.09) 1px, transparent 1.4px);
     background-size:26px 26px;
@@ -81,27 +58,434 @@
   }
   .vignette{background:radial-gradient(115% 90% at 50% 8%, transparent 45%, rgba(4,3,14,.62) 100%)}
 
-  /* ---------- Boot screen ---------- */
-  .cube3d{animation:spin3d 7s linear infinite;transform-style:preserve-3d}
-  @keyframes spin3d{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
-
-  /* ---------- Per-icon animations (each save file moves like the real BIOS) ---------- */
-  .a-flip,.a-punch,.a-rays,.a-roll,.a-float,.a-beat,.a-sway,.a-orbit,.a-hover{transform-box:fill-box;transform-origin:center}
+  /* ---------- Per-icon idle animations ---------- */
+  .a-float,.a-punch,.a-rays,.a-beat,.a-sway,.a-hover{transform-box:fill-box;transform-origin:center}
   .a-sway{transform-origin:50% 100%}
-  .a-flip{animation:flip 3s ease-in-out infinite}
   .a-punch{animation:punch 1.7s ease-in-out infinite}
   .a-rays{animation:spin360 10s linear infinite}
-  .a-roll{animation:spin360 1.6s linear infinite}
-  .a-orbit{animation:spin360 14s linear infinite}
   .a-float{animation:floaty 2.6s ease-in-out infinite}
   .a-hover{animation:floaty 2.1s ease-in-out infinite}
   .a-beat{animation:beat 1.1s ease-in-out infinite}
   .a-sway{animation:sway 3.2s ease-in-out infinite}
   .a-dash{animation:dashy 1.4s ease-in-out infinite}
-  @keyframes flip{0%,100%{transform:scaleX(1)}50%{transform:scaleX(-1)}}
   @keyframes punch{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.14) rotate(-6deg)}60%{transform:scale(.95) rotate(4deg)}}
   @keyframes spin360{to{transform:rotate(360deg)}}
   @keyframes floaty{0%,100%{transform:translateY(3px)}50%{transform:translateY(-4px)}}
   @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.28);opacity:.7}}
   @keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
   @keyframes dashy{0%,100%{opacity:.25}50%{opacity:.9}}
+
+  /* ---------- Page layout ---------- */
+  html{scrollbar-color:#4a4390 #14122e}
+  body{margin:0;min-height:100vh;overflow-x:hidden;color:#c9c3ec;padding-bottom:96px}
+  .bgfx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .bgfx .dotgrid,.bgfx .vignette{position:absolute;inset:0}
+  .page{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:1.6rem clamp(1.1rem,4vw,2rem) 7rem}
+
+  header{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:.95rem}
+  .logo{width:44px;height:44px;flex:none}
+  .brand h1{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:clamp(1.45rem,3.2vw,2rem);letter-spacing:.06em;color:#f2efff}
+  .brand p{margin:.2rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#8f8ac2}
+  .hnav{margin-left:auto;display:flex;gap:.55rem;flex-wrap:wrap}
+  .hnav .tab{display:inline-flex;align-items:center;text-decoration:none;font-weight:700;font-size:11.5px;letter-spacing:.12em}
+
+  .stage{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:3.2rem;align-items:start;margin-top:2.6rem}
+
+  /* ---------- The OPTIONS list ---------- */
+  .menu{position:relative;display:flex;flex-direction:column;align-items:center}
+  .kicker{text-align:center;margin-bottom:1.9rem}
+  .kicker h2{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:1.55rem;letter-spacing:.2em;color:#f2efff}
+  .kicker p{margin:.45rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#8f8ac2}
+
+  .rows{display:flex;flex-direction:column;gap:.15rem;width:100%;max-width:440px}
+  .row{
+    display:flex;align-items:center;gap:1rem;width:100%;
+    padding:.95rem 1.15rem;border-radius:16px;border:1px solid transparent;
+    background:transparent;color:#8f8ac2;font-weight:700;font-size:15px;letter-spacing:.1em;
+    text-align:left;transition:color .18s, background .18s;-webkit-tap-highlight-color:transparent;
+  }
+  .row:hover{background:rgba(255,255,255,.03)}
+  .row.sel{color:#fff}
+  .row:focus-visible{outline:2px solid rgba(255,210,30,.6);outline-offset:3px}
+  .ric{width:34px;height:34px;flex:none;display:block}
+  .ric svg{width:100%;height:100%;display:block;overflow:visible}
+  .rlab{flex:1}
+  .rval{font-size:10px;letter-spacing:.2em;color:#ffd21e;font-weight:700;white-space:nowrap}
+
+  /* ---------- Description panel (right) ---------- */
+  .panel{
+    position:sticky;top:1.4rem;
+    background:#17153a;border:1px solid rgba(185,166,242,.2);border-radius:22px;
+    padding:1.45rem 1.5rem 1.5rem;box-shadow:0 34px 70px -34px rgba(0,0,0,.7);
+  }
+  .phead{display:flex;align-items:center;gap:1rem}
+  .picon{width:64px;height:64px;flex:none;padding:15%;border-radius:26%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09)}
+  .picon svg{width:100%;height:100%;display:block;overflow:visible}
+  .pname{font-weight:700;font-size:1.02rem;color:#fff;letter-spacing:.02em}
+  .ptitle{margin-top:.32rem;font-size:9.5px;font-weight:700;letter-spacing:.2em;color:#8f8ac2}
+  .pdiv{border-top:1px dashed rgba(185,166,242,.22);margin:1.05rem 0 1.1rem}
+  .pbody{min-height:16.5rem}
+  .swap{animation:panelIn .22s ease}
+  @keyframes panelIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+  .pbody p{color:#c9c3ec;font-size:13.5px;line-height:1.7;margin:0 0 .8rem}
+  .pbody p.sub{color:#8f8ac2;font-size:12.5px}
+  .pbody b{color:#ffd21e;font-weight:700}
+  .tagrow{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+  .footnote{font-size:11px!important;color:#6f6a9e!important;font-style:italic;margin-top:.9rem!important}
+  .tlrow{display:flex;gap:.9rem;margin:.85rem 0}
+  .tlyear{font-family:'Days One',sans-serif;font-size:.8rem;color:#ffd21e;min-width:3.1rem;padding-top:.15rem;letter-spacing:.04em}
+  .tlrow p{margin:0!important}
+  .nowrow{display:grid;grid-template-columns:6.2rem 1fr;gap:.8rem;margin:.62rem 0;align-items:baseline}
+  .nowlab{font-size:9.5px;font-weight:700;letter-spacing:.16em;color:#ffd21e}
+  .nowval{color:#c9c3ec;font-size:13.5px}
+  .bigclock{font-family:'Days One',sans-serif;font-weight:400;font-size:2.5rem;color:#ffd21e;letter-spacing:.06em;line-height:1}
+  .bigdate{font-size:10px;font-weight:700;letter-spacing:.22em;color:#8f8ac2;margin-top:.55rem}
+  .maillink{display:inline-flex;align-items:center;gap:.45rem;font-weight:700;color:#fff;font-size:15px;text-decoration:none;border-bottom:2px solid rgba(255,210,30,.5);padding-bottom:2px;transition:color .15s,border-color .15s}
+  .maillink:hover{color:#ffd21e;border-color:#ffd21e}
+  .linkrow{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px dashed rgba(185,166,242,.18);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:.14em;color:#a29dd0;transition:color .15s}
+  .linkrow:hover{color:#ffd21e}
+  .linkrow svg{opacity:.6}
+  .pact{margin-top:1.1rem;display:flex;justify-content:center}
+
+  /* ---------- Bottom BIOS bar ---------- */
+  .biosbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:.95rem;background:#1d1a49;border:1px solid rgba(185,166,242,.28);border-radius:999px;padding:.6rem 1.35rem;box-shadow:0 18px 40px -18px rgba(0,0,0,.7);white-space:nowrap;max-width:calc(100vw - 1.4rem)}
+  .biosbar span{font-size:9.5px;font-weight:700;letter-spacing:.18em;color:#9d97cf}
+  .biosbar .led{width:8px;height:8px;border-radius:3px;background:#ffd21e;flex:none}
+  .biosbar .clock{font-family:'Days One',sans-serif;font-weight:400;font-size:11.5px;letter-spacing:.1em;color:#ffd21e}
+  .biosbar .sep{width:1px;height:13px;background:rgba(185,166,242,.3)}
+
+  @media(max-width:980px){.stage{grid-template-columns:1fr}.panel{position:static}}
+  @media(max-width:640px){.hnav{margin-left:0;width:100%}}
+  @media(max-width:480px){.biosbar{gap:.6rem;padding:.55rem .95rem}.biosbar .date,.biosbar .s1{display:none}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+  [x-cloak]{display:none!important}
+
+  body{
+    font-family:'Quicksand',sans-serif;
+    background:#0d0c24;
+    /* Glove hand cursor, like the original BIOS */
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><path d="M10 1.5c1.3 0 2.3 1 2.3 2.3v9.4l7.6 1.6c1.8.4 3 2 3 3.8 0 4.6-3 9.9-10.4 9.9-5.4 0-8.3-2.5-10.1-6L1 19.6c-.7-1.3-.2-2.9 1.1-3.6 1.1-.6 2.5-.3 3.3.7l1.3 1.7V3.8C6.7 2.5 7.7 1.5 9 1.5z" fill="%23ffffff" stroke="%23151527" stroke-width="1.6" stroke-linejoin="round"/></svg>') 10 2, auto;
+  }
+  button{cursor:inherit;font-family:'Quicksand',sans-serif}
+
+  /* ---------- Yellow BIOS cursor ring ---------- */
+  .cursor-ring{
+    position:absolute;top:0;left:0;z-index:10;pointer-events:none;opacity:0;
+    border:5px solid #ffd21e;border-radius:16px;
+    box-shadow:0 0 0 1.5px rgba(20,18,58,.5), 0 10px 24px -10px rgba(255,210,30,.4);
+    transition:transform .2s cubic-bezier(.3,1.5,.5,1), width .2s cubic-bezier(.3,1.5,.5,1), height .2s cubic-bezier(.3,1.5,.5,1), opacity .16s ease;
+    animation:ringPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes ringPulse{
+    0%,100%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 24px -10px rgba(255,210,30,.3)}
+    50%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 30px -8px rgba(255,210,30,.55)}
+  }
+
+  /* ---------- Chips / buttons / tabs ---------- */
+  .chip{font-size:10px;font-weight:700;letter-spacing:.12em;padding:.25rem .5rem;border-radius:7px;background:rgba(255,255,255,.06);color:#a29dd0;border:1px solid rgba(255,255,255,.06)}
+  .chip-rw{color:#9be8b0;border-color:rgba(110,231,145,.25);background:rgba(110,231,145,.07)}
+  .chip-gold{color:#ffd21e;border-color:rgba(255,210,30,.28);background:rgba(255,210,30,.07)}
+  .tab{padding:.5rem .95rem;border-radius:14px;border:1px solid transparent;transition:all .2s;text-align:left;line-height:1.15}
+  .tab-on{background:#5b50b8;border-color:#7d71e0;color:#fff;box-shadow:0 8px 18px -8px rgba(91,80,184,.8), inset 0 1px 0 rgba(255,255,255,.25)}
+  .tab-off{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#8f8ac2}
+  .tab-off:hover{background:rgba(255,255,255,.08);color:#cfc9f2}
+
+  .dbtn{padding:.55rem 1.5rem;border-radius:12px;font-family:'Days One';font-size:.8rem;letter-spacing:.08em;transition:all .15s;border:none}
+  .dbtn-primary{background:#ffd21e;color:#241f08;box-shadow:0 6px 16px -6px rgba(255,210,30,.5);display:inline-flex;align-items:center;gap:.55rem;text-decoration:none}
+  .dbtn-primary:hover{transform:translateY(-1px);background:#ffdd4d}
+
+  /* ---------- Ambient background (your original) ---------- */
+  .dotgrid{
+    background-image:radial-gradient(rgba(185,166,242,.09) 1px, transparent 1.4px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+    mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+  }
+  .shape{position:absolute;border:2px solid rgba(185,166,242,.07);border-radius:26%;animation:drift linear infinite}
+  .shape.gold{border-color:rgba(255,210,30,.06)}
+  @keyframes drift{
+    0%{transform:rotate(0) translate(0,0)}
+    50%{transform:rotate(180deg) translate(26px,-22px)}
+    100%{transform:rotate(360deg) translate(0,0)}
+  }
+  .vignette{background:radial-gradient(115% 90% at 50% 8%, transparent 45%, rgba(4,3,14,.62) 100%)}
+
+  /* ---------- Per-icon idle animations (each disc moves like a BIOS icon) ---------- */
+  .a-float,.a-punch,.a-rays,.a-beat,.a-sway,.a-orbit,.a-hover{transform-box:fill-box;transform-origin:center}
+  .a-sway{transform-origin:50% 100%}
+  .a-punch{animation:punch 1.7s ease-in-out infinite}
+  .a-rays{animation:spin360 10s linear infinite}
+  .a-orbit{animation:spin360 14s linear infinite}
+  .a-float{animation:floaty 2.6s ease-in-out infinite}
+  .a-hover{animation:floaty 2.1s ease-in-out infinite}
+  .a-beat{animation:beat 1.1s ease-in-out infinite}
+  .a-sway{animation:sway 3.2s ease-in-out infinite}
+  .a-dash{animation:dashy 1.4s ease-in-out infinite}
+  @keyframes punch{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.14) rotate(-6deg)}60%{transform:scale(.95) rotate(4deg)}}
+  @keyframes spin360{to{transform:rotate(360deg)}}
+  @keyframes floaty{0%,100%{transform:translateY(3px)}50%{transform:translateY(-4px)}}
+  @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.28);opacity:.7}}
+  @keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+  @keyframes dashy{0%,100%{opacity:.25}50%{opacity:.9}}
+
+  /* ---------- Page layout ---------- */
+  html{scrollbar-color:#4a4390 #14122e}
+  body{margin:0;min-height:100vh;overflow-x:hidden;color:#c9c3ec;padding-bottom:96px}
+  .bgfx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .bgfx .dotgrid,.bgfx .vignette{position:absolute;inset:0}
+  .page{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:1.6rem clamp(1.1rem,4vw,2rem) 7rem}
+
+  header{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:.95rem}
+  .logo{width:44px;height:44px;flex:none}
+  .brand h1{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:clamp(1.45rem,3.2vw,2rem);letter-spacing:.06em;color:#f2efff}
+  .brand p{margin:.2rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#8f8ac2}
+  .hnav{margin-left:auto;display:flex;gap:.55rem;flex-wrap:wrap}
+  .hnav .tab{display:inline-flex;align-items:center;text-decoration:none;font-weight:700;font-size:11.5px;letter-spacing:.12em}
+
+  .stage{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:3rem;align-items:start;margin-top:2.2rem}
+
+  /* ---------- The disc loader ---------- */
+  .discside{display:flex;flex-direction:column;align-items:center}
+  .kicker{text-align:center;margin-bottom:1.6rem}
+  .kicker h2{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:1.55rem;letter-spacing:.2em;color:#f2efff}
+  .kicker p{margin:.45rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#8f8ac2}
+
+  :root{--tray:min(380px,74vw)}
+  .tray{
+    width:var(--tray);height:var(--tray);padding:0;border:none;border-radius:50%;
+    background:#131134;border:1px solid rgba(185,166,242,.16);
+    box-shadow:inset 0 18px 44px rgba(0,0,0,.55), inset 0 -10px 26px rgba(91,80,184,.08), 0 30px 60px -30px rgba(0,0,0,.85);
+    display:grid;place-items:center;-webkit-tap-highlight-color:transparent;
+  }
+  .tray:focus-visible{outline:2px solid rgba(255,210,30,.7);outline-offset:6px}
+  .discwrap{display:block;width:82%;height:82%;animation:discIn .5s cubic-bezier(.34,1.45,.64,1)}
+  .discwrap svg{width:100%;height:100%;display:block;overflow:visible}
+  .tray:hover .discwrap{animation:discIn .5s cubic-bezier(.34,1.45,.64,1), discHover .35s ease .5s forwards}
+  @keyframes discIn{from{opacity:0;transform:rotate(-140deg) scale(.7)}to{opacity:1;transform:rotate(0) scale(1)}}
+  @keyframes discHover{to{transform:scale(1.035)}}
+
+  .swap{animation:swapIn .24s ease}
+  @keyframes swapIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+  .gtitle{margin:1.5rem 0 0;font-family:'Days One',sans-serif;font-weight:400;font-size:clamp(1.3rem,3vw,1.8rem);letter-spacing:.12em;color:#f2efff;text-align:center}
+  .gsub{margin:.5rem 0 0;font-size:11px;font-weight:700;letter-spacing:.26em;color:#8f8ac2;text-align:center}
+  .pub{margin:.75rem 0 0;font-size:9px;font-weight:700;letter-spacing:.3em;color:#6f6a9e;text-align:center}
+  .startrow{margin:1.35rem 0 2.1rem}
+
+  /* ---------- Disc shelf (selector) ---------- */
+  .shelf{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:1.15rem 1.3rem;padding:.5rem .3rem}
+  .sdisc{display:flex;flex-direction:column;align-items:center;gap:.5rem;background:none;border:none;padding:.35rem .45rem;border-radius:16px;-webkit-tap-highlight-color:transparent}
+  .sdisc svg{width:56px;height:56px;display:block;overflow:visible}
+  .sname{font-size:9px;font-weight:700;letter-spacing:.18em;color:#7c77ab;transition:color .18s}
+  .sdisc:hover .sname,.sdisc.sel .sname{color:#ffd21e}
+  .sdisc:focus-visible{outline:2px solid rgba(255,210,30,.6);outline-offset:3px}
+  .hint{margin-top:1.15rem;font-size:9.5px;font-weight:700;letter-spacing:.22em;color:#6f6a9e;text-align:center}
+
+  /* ---------- Info panel (back of the box) ---------- */
+  .panel{
+    position:sticky;top:1.4rem;
+    background:#17153a;border:1px solid rgba(185,166,242,.2);border-radius:22px;
+    padding:1.45rem 1.5rem 1.5rem;box-shadow:0 34px 70px -34px rgba(0,0,0,.7);
+  }
+  .phead{display:flex;align-items:center;gap:1rem}
+  .picon{width:64px;height:64px;flex:none;display:grid;place-items:center;border-radius:26%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09)}
+  .picon svg{width:70%;height:70%;display:block;overflow:visible}
+  .pname{font-family:'Days One',sans-serif;font-weight:400;font-size:1.02rem;color:#fff;letter-spacing:.06em}
+  .ptitle{margin-top:.35rem;font-size:9.5px;font-weight:700;letter-spacing:.2em;color:#8f8ac2}
+  .pmeta{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.05rem}
+  .pdiv{border-top:1px dashed rgba(185,166,242,.22);margin:1.05rem 0 1.1rem}
+  .pbody{min-height:15rem}
+  .pbody p{color:#c9c3ec;font-size:13.5px;line-height:1.7;margin:0 0 .8rem}
+  .pbody p.sub{color:#8f8ac2;font-size:12.5px}
+  .tagrow{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0}
+  .footnote{font-size:11px!important;color:#6f6a9e!important;font-style:italic;margin-top:.9rem!important}
+  .linkrow{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px dashed rgba(185,166,242,.18);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:.14em;color:#a29dd0;transition:color .15s}
+  .linkrow:hover{color:#ffd21e}
+  .linkrow svg{opacity:.6}
+
+  /* ---------- Bottom BIOS bar ---------- */
+  .biosbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:.95rem;background:#1d1a49;border:1px solid rgba(185,166,242,.28);border-radius:999px;padding:.6rem 1.35rem;box-shadow:0 18px 40px -18px rgba(0,0,0,.7);white-space:nowrap;max-width:calc(100vw - 1.4rem)}
+  .biosbar span{font-size:9.5px;font-weight:700;letter-spacing:.18em;color:#9d97cf}
+  .biosbar .led{width:8px;height:8px;border-radius:3px;background:#ffd21e;flex:none}
+  .biosbar .clock{font-family:'Days One',sans-serif;font-weight:400;font-size:11.5px;letter-spacing:.1em;color:#ffd21e}
+  .biosbar .sep{width:1px;height:13px;background:rgba(185,166,242,.3)}
+
+  @media(max-width:980px){.stage{grid-template-columns:1fr}.panel{position:static}}
+  @media(max-width:640px){.hnav{margin-left:0;width:100%}}
+  @media(max-width:480px){.biosbar{gap:.6rem;padding:.55rem .95rem}.biosbar .date,.biosbar .s1{display:none}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+    [x-cloak]{display:none!important}
+
+  body{
+    font-family:'Quicksand',sans-serif;
+    background:#0d0c24;
+    /* Glove hand cursor, like the original BIOS */
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><path d="M10 1.5c1.3 0 2.3 1 2.3 2.3v9.4l7.6 1.6c1.8.4 3 2 3 3.8 0 4.6-3 9.9-10.4 9.9-5.4 0-8.3-2.5-10.1-6L1 19.6c-.7-1.3-.2-2.9 1.1-3.6 1.1-.6 2.5-.3 3.3.7l1.3 1.7V3.8C6.7 2.5 7.7 1.5 9 1.5z" fill="%23ffffff" stroke="%23151527" stroke-width="1.6" stroke-linejoin="round"/></svg>') 10 2, auto;
+  }
+  button{cursor:inherit;font-family:'Quicksand',sans-serif}
+
+  /* ---------- Yellow BIOS cursor ring ---------- */
+  .cursor-ring{
+    position:absolute;top:0;left:0;z-index:10;pointer-events:none;opacity:0;
+    border:5px solid #ffd21e;border-radius:16px;
+    box-shadow:0 0 0 1.5px rgba(20,18,58,.5), 0 10px 24px -10px rgba(255,210,30,.4);
+    transition:transform .2s cubic-bezier(.3,1.5,.5,1), width .2s cubic-bezier(.3,1.5,.5,1), height .2s cubic-bezier(.3,1.5,.5,1), opacity .16s ease;
+    animation:ringPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes ringPulse{
+    0%,100%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 24px -10px rgba(255,210,30,.3)}
+    50%{box-shadow:0 0 0 1.5px rgba(20,18,58,.5),0 10px 30px -8px rgba(255,210,30,.55)}
+  }
+
+  /* ---------- Chips / tabs / buttons ---------- */
+  .chip{font-size:10px;font-weight:700;letter-spacing:.12em;padding:.25rem .5rem;border-radius:7px;background:rgba(255,255,255,.06);color:#a29dd0;border:1px solid rgba(255,255,255,.06)}
+  .chip-rw{color:#9be8b0;border-color:rgba(110,231,145,.25);background:rgba(110,231,145,.07)}
+  .chip-gold{color:#ffd21e;border-color:rgba(255,210,30,.28);background:rgba(255,210,30,.07)}
+  .tab{padding:.5rem .95rem;border-radius:14px;border:1px solid transparent;transition:all .2s;text-align:left;line-height:1.15}
+  .tab-on{background:#5b50b8;border-color:#7d71e0;color:#fff;box-shadow:0 8px 18px -8px rgba(91,80,184,.8), inset 0 1px 0 rgba(255,255,255,.25)}
+  .tab-off{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:#8f8ac2}
+  .tab-off:hover{background:rgba(255,255,255,.08);color:#cfc9f2}
+  .fbtn{padding:.42rem .85rem;border-radius:11px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:#8f8ac2;font-size:10.5px;font-weight:700;letter-spacing:.16em;transition:all .18s}
+  .fbtn:hover{color:#cfc9f2;background:rgba(255,255,255,.08)}
+  .fbtn.on-edu{background:rgba(110,231,145,.12);border-color:rgba(110,231,145,.4);color:#9be8b0}
+  .fbtn.on-work{background:rgba(255,210,30,.1);border-color:rgba(255,210,30,.4);color:#ffd21e}
+  .fbtn:focus-visible{outline:2px solid rgba(255,210,30,.6);outline-offset:3px}
+  .navb{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#a29dd0;transition:all .15s}
+  .navb:hover{background:#5b50b8;border-color:#7d71e0;color:#fff}
+  .navb:focus-visible{outline:2px solid rgba(255,210,30,.6);outline-offset:3px}
+
+  /* ---------- Ambient background (your original) ---------- */
+  .dotgrid{
+    background-image:radial-gradient(rgba(185,166,242,.09) 1px, transparent 1.4px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+    mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+  }
+  .shape{position:absolute;border:2px solid rgba(185,166,242,.07);border-radius:26%;animation:drift linear infinite}
+  .shape.gold{border-color:rgba(255,210,30,.06)}
+  @keyframes drift{
+    0%{transform:rotate(0) translate(0,0)}
+    50%{transform:rotate(180deg) translate(26px,-22px)}
+    100%{transform:rotate(360deg) translate(0,0)}
+  }
+  .vignette{background:radial-gradient(115% 90% at 50% 8%, transparent 45%, rgba(4,3,14,.62) 100%)}
+
+  /* ---------- Idle animations ---------- */
+  .a-float,.a-dash{transform-box:fill-box;transform-origin:center}
+  .a-float{animation:floaty 2.6s ease-in-out infinite}
+  .a-dash{animation:dashy 1.4s ease-in-out infinite}
+  @keyframes floaty{0%,100%{transform:translateY(3px)}50%{transform:translateY(-4px)}}
+  @keyframes dashy{0%,100%{opacity:.25}50%{opacity:.9}}
+
+  /* ---------- Page layout ---------- */
+  html{scrollbar-color:#4a4390 #14122e}
+  body{margin:0;min-height:100vh;overflow-x:hidden;color:#c9c3ec;padding-bottom:96px}
+  .bgfx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .bgfx .dotgrid,.bgfx .vignette{position:absolute;inset:0}
+  .page{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:1.6rem clamp(1.1rem,4vw,2rem) 7rem}
+
+  header{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:.95rem}
+  .logo{width:44px;height:44px;flex:none}
+  .brand h1{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:clamp(1.45rem,3.2vw,2rem);letter-spacing:.06em;color:#f2efff}
+  .brand p{margin:.2rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#8f8ac2}
+  .hnav{margin-left:auto;display:flex;gap:.55rem;flex-wrap:wrap}
+  .hnav .tab{display:inline-flex;align-items:center;text-decoration:none;font-weight:700;font-size:11.5px;letter-spacing:.12em}
+
+  .stage{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:3rem;align-items:start;margin-top:2.2rem}
+
+  /* ---------- Timeline ---------- */
+  .tlzone{display:flex;flex-direction:column;align-items:center;min-width:0}
+  .kicker{text-align:center;margin-bottom:1.4rem}
+  .kicker h2{margin:0;font-family:'Days One',sans-serif;font-weight:400;font-size:1.55rem;letter-spacing:.2em;color:#f2efff}
+  .kicker p{margin:.45rem 0 0;font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#8f8ac2}
+  .filters{display:flex;gap:.5rem;margin-bottom:1.6rem;flex-wrap:wrap;justify-content:center}
+
+  .tl{position:relative;width:100%;max-width:560px;padding:0 0 1rem}
+  /* the dashed spine */
+  .tl::before{
+    content:'';position:absolute;left:11px;top:8px;bottom:8px;width:0;
+    border-left:2px dashed rgba(185,166,242,.25);
+  }
+
+  .titem{position:relative;display:grid;grid-template-columns:24px 1fr;gap:1rem;padding:.35rem 0;opacity:0;transform:translateX(-16px);transition:opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1)}
+  .titem.in{opacity:1;transform:none}
+  .titem:last-child .tcard{margin-bottom:0}
+
+  /* node on the spine */
+  .tnode{position:relative;display:flex;justify-content:center;padding-top:1.45rem}
+  .tdot{
+    width:13px;height:13px;border-radius:50%;flex:none;position:relative;z-index:2;
+    border:2.5px solid #0d0c24;
+  }
+  .tdot.edu{background:#6ee791;box-shadow:0 0 0 3px rgba(110,231,145,.18), 0 0 14px rgba(110,231,145,.55)}
+  .tdot.work{background:#ffd21e;box-shadow:0 0 0 3px rgba(255,210,30,.18), 0 0 14px rgba(255,210,30,.55)}
+  .tdot::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1.5px solid currentColor;opacity:0}
+  .titem.sel .tdot.edu{animation:nodebeat 1.6s ease-in-out infinite}
+  .titem.sel .tdot.work{animation:nodebeat 1.6s ease-in-out infinite}
+  @keyframes nodebeat{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+
+  .tcard{
+    position:relative;width:100%;text-align:left;
+    background:rgba(255,255,255,.028);border:1px solid rgba(185,166,242,.13);
+    border-radius:16px;padding:.95rem 1.1rem;
+    transition:background .18s, border-color .18s, transform .18s;-webkit-tap-highlight-color:transparent;
+  }
+  .tcard:hover{background:rgba(255,255,255,.055);transform:translateX(3px)}
+  .titem.sel .tcard{border-color:rgba(255,210,30,.45);background:rgba(255,210,30,.05)}
+  .tcard:focus-visible{outline:2px solid rgba(255,210,30,.6);outline-offset:3px}
+  .ttop{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
+  .tyear{font-family:'Days One',sans-serif;font-size:.78rem;letter-spacing:.1em}
+  .tyear.edu{color:#6ee791}.tyear.work{color:#ffd21e}
+  .tnow{font-size:8px;font-weight:800;letter-spacing:.16em;color:#0d0c24;background:#ffd21e;border-radius:5px;padding:.13rem .4rem;box-shadow:0 4px 10px -3px rgba(255,210,30,.6)}
+  .ttitle{margin-top:.35rem;font-weight:700;font-size:.92rem;color:#f2efff;letter-spacing:.03em;line-height:1.35}
+  .torg{margin-top:.28rem;font-size:9.5px;font-weight:700;letter-spacing:.18em;color:#8f8ac2}
+  .titem.sel .ttitle{color:#fff}
+
+  .hint{margin-top:1.3rem;font-size:9.5px;font-weight:700;letter-spacing:.22em;color:#6f6a9e;text-align:center}
+  .legend{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem}
+  .lg{display:inline-flex;align-items:center;gap:.45rem;font-size:9.5px;font-weight:700;letter-spacing:.16em;color:#8f8ac2}
+  .lgdot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .lgdot.edu{background:#6ee791;box-shadow:0 0 8px rgba(110,231,145,.5)}
+  .lgdot.work{background:#ffd21e;box-shadow:0 0 8px rgba(255,210,30,.5)}
+
+  .swap{animation:panelIn .22s ease}
+  @keyframes panelIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ---------- Record panel ---------- */
+  .panel{
+    position:sticky;top:1.4rem;
+    background:#17153a;border:1px solid rgba(185,166,242,.2);border-radius:22px;
+    padding:1.45rem 1.5rem 1.5rem;box-shadow:0 34px 70px -34px rgba(0,0,0,.7);
+  }
+  .phead{display:flex;align-items:center;gap:1rem}
+  .picon{width:60px;height:60px;flex:none;display:grid;place-items:center;border-radius:25%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09)}
+  .pindex{margin-left:auto;font-family:'Days One',sans-serif;font-size:.72rem;letter-spacing:.12em;color:#6f6a9e}
+  .pname{font-weight:700;font-size:1.02rem;color:#fff;letter-spacing:.02em;line-height:1.35}
+  .ptitle{margin-top:.32rem;font-size:9.5px;font-weight:700;letter-spacing:.2em;color:#8f8ac2}
+  .pmeta{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.05rem}
+  .pdiv{border-top:1px dashed rgba(185,166,242,.22);margin:1.05rem 0 1.1rem}
+  .pbody{min-height:12.5rem}
+  .pbody p{color:#c9c3ec;font-size:13.5px;line-height:1.7;margin:0 0 .8rem}
+  .pbody p.sub{color:#8f8ac2;font-size:12.5px}
+  .footnote{font-size:11px!important;color:#6f6a9e!important;font-style:italic;margin-top:.9rem!important}
+  .pnav{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1.15rem}
+  .pnavhint{font-size:9px;font-weight:700;letter-spacing:.2em;color:#6f6a9e}
+
+  /* ---------- Bottom BIOS bar ---------- */
+  .biosbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:.95rem;background:#1d1a49;border:1px solid rgba(185,166,242,.28);border-radius:999px;padding:.6rem 1.35rem;box-shadow:0 18px 40px -18px rgba(0,0,0,.7);white-space:nowrap;max-width:calc(100vw - 1.4rem)}
+  .biosbar span{font-size:9.5px;font-weight:700;letter-spacing:.18em;color:#9d97cf}
+  .biosbar .led{width:8px;height:8px;border-radius:3px;background:#ffd21e;flex:none}
+  .biosbar .clock{font-family:'Days One',sans-serif;font-weight:400;font-size:11.5px;letter-spacing:.1em;color:#ffd21e}
+  .biosbar .sep{width:1px;height:13px;background:rgba(185,166,242,.3)}
+
+  @media(max-width:980px){.stage{grid-template-columns:1fr}.panel{position:static}}
+  @media(max-width:640px){.hnav{margin-left:0;width:100%}}
+  @media(max-width:480px){.biosbar{gap:.6rem;padding:.55rem .95rem}.biosbar .date,.biosbar .s1{display:none}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
