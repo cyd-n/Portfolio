@@ -79,7 +79,7 @@
 
     <!-- Slot tabs -->
     <div class="flex gap-1">
-      <template x-for="s in ['FrontEnd','BackEnd', 'Others']" :key="s">
+      <template x-for="s in ['FrontEnd','BackEnd', 'Others', 'Tools']" :key="s">
         <button type="button" @click="switchSlot(s)" class="tab" :class="activeSlot===s ? 'tab-on' : 'tab-off'">
           <span class="flex items-center gap-2">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
@@ -113,7 +113,7 @@
     <div class="w-full max-w-[960px]">
 
     <div x-show="files.length" x-ref="grid"
-     class="relative grid grid-cols-[192px_192px] justify-center w-full mx-auto gap-x-3 gap-y-8 transition-all duration-200"
+     class="relative grid grid-cols-[192px_192px_192px] justify-center w-full mx-auto gap-x-3 gap-y-8 transition-all duration-200"
      :class="switching ? 'opacity-0 scale-[.97]' : 'opacity-100 scale-100'">
 
     <template x-for="(f,i) in files" :key="activeSlot + '-' + f.id">
@@ -127,8 +127,8 @@
                 @click="clickTile(i)">
 
             <img
-                src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg"
-                alt="Java"
+                :src="f.icon"
+                :alt="f.lang"
                 class="w-28 h-28"
             >
         </button>
@@ -149,9 +149,10 @@
   <footer class="rounded-2xl bg-panel/85 border border-white/10 backdrop-blur px-4 sm:px-5 py-3.5 min-h-[88px] flex items-center">
     <template x-if="sel">
       <div class="flex items-center gap-4 w-full flex-wrap">
-        // imgs
+        // img
+      <!-- <img :src="sel.icon" alt="sel.lang"> To big--> 
         <div class="min-w-0">
-          <div class="font-display text-[15px] sm:text-base text-gold tracking-wide truncate" x-text="sel.game"></div>
+          <div class="font-display text-[15px] sm:text-base text-gold tracking-wide truncate" x-text="sel.lang"></div>
           <div class="text-[13px] text-sub truncate mt-0.5" x-text="sel.desc"></div>
           <div class="flex gap-2 mt-2">
             <span class="chip" x-text="sel.blocks + ' BLOCKS'"></span>
@@ -199,119 +200,344 @@
 const SAVES = {
   FrontEnd: [
     {
-      id: 'ww',
-      icon: './Imgs/Altair.png',
-      game: 'The Legend of Zelda: The Wind Waker',
-      desc: 'Quest file — Triforce shards 5/8. Second quest unlocked.',
+      id: '0',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+      lang: 'HTML',
+      desc: '',
       blocks: 12,
-      date: '2003.04.05'
+      date: '2023'
     },
     {
-      id: 'ssbm',
-      icon: 'smash',
-      game: 'Super Smash Bros. Melee',
-      desc: 'Trophy collection 214/290. All events cleared.',
+      id: '1',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
+      lang: 'CSS',
+      desc: '',
       blocks: 9,
-      date: '2004.01.17'
+      date: '2023'
     },
     {
-      id: 'sunshine',
-      icon: 'sun',
-      game: 'Super Mario Sunshine',
-      desc: 'Shines 87/120. Blue coins 164/240.',
+      id: '2',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+      lang: 'Js',
+      desc: '',
       blocks: 8,
-      date: '2003.08.21'
+      date: '2025'
     },
     {
-      id: 'mario-kart',
-      icon: 'wheel',
-      game: 'Mario Kart: Double Dash!!',
-      desc: 'All cups cleared. Mirror mode unlocked.',
+      id: '3',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/alpinejs/alpinejs-original.svg',
+      lang: 'AlpineJs',
+      desc: '',
       blocks: 5,
-      date: '2003.11.02'
+      date: '2025'
     },
     {
-      id: 'luigi',
-      icon: 'boo',
-      game: 'Luigi’s Mansion',
-      desc: 'Rank A mansion clear. All 50 Boos collected.',
+      id: '4',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+      lang: 'Vue',
+      desc: '',
       blocks: 4,
-      date: '2002.12.09'
-    },
-    {
-      id: 'metroid',
-      icon: 'metroid',
-      game: 'Metroid Prime',
-      desc: '82% items collected. Phazon Mines complete.',
-      blocks: 10,
-      date: '2003.06.14'
-    },
-    {
-      id: 'pikmin',
-      icon: 'pikmin',
-      game: 'Pikmin 2',
-      desc: 'Treasure collection 174/201. Debt repaid.',
-      blocks: 7,
-      date: '2004.03.28'
+      date: '2025'
     }
   ],
 
   BackEnd: [
     {
-      id: 'pokemon',
-      icon: 'leaf',
-      game: 'Pokémon Colosseum',
-      desc: 'Story complete. 46 Shadow Pokémon purified.',
+      id: '5',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',
+      lang: 'C#',
+      desc: '',
       blocks: 8,
-      date: '2004.07.11'
+      date: '2020'
     },
     {
-      id: 'tales',
-      icon: 'exsphere',
-      game: 'Tales of Symphonia',
-      desc: 'Journey file — Flanoir route. 62 hours played.',
-      blocks: 11,
-      date: '2004.09.03'
-    },
-    {
-      id: 'fzero',
-      icon: 'falcon',
-      game: 'F-Zero GX',
-      desc: 'Story mode Chapter 9 complete. Master class unlocked.',
+      id: '6',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+      lang: 'Java',
+      desc: '',
       blocks: 6,
-      date: '2003.10.19'
+      date: '2026'
     },
     {
-      id: 'sonic',
-      icon: 'sonic',
-      game: 'Sonic Adventure 2 Battle',
-      desc: 'Hero/Dark stories complete. 127 emblems.',
-      blocks: 7,
-      date: '2003.05.26'
-    },
-    {
-      id: 'zelda',
-      icon: 'rune',
-      game: 'The Legend of Zelda: Twilight Princess',
-      desc: 'Quest file — 54 Poe souls. Master Sword obtained.',
+      id: '7',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+      lang: 'Python',
+      desc: '',
       blocks: 12,
-      date: '2006.12.18'
+      date: '2024'
     },
     {
-      id: 'dk',
-      icon: 'banana',
-      game: 'Donkey Konga',
-      desc: 'Jukebox collection — 38 songs unlocked.',
+      id: '8',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
+      lang: 'PHP',
+      desc: '',
+      blocks: 7,
+      date: '2024'
+    },
+    {
+      id: '9',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+      lang: 'NodeJs',
+      desc: '',
+      blocks: 12,
+      date: '2026'
+    },
+    {
+      id: '10',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg',
+      lang: 'ASP.NET Core',
+      desc: '',
+      date: '2026'
+    },
+    {
+      id: '11',
+      icon: 'https://cdn.simpleicons.org/dbeaver',
+      lang: 'DBeaver',
+      desc: '',
+      date: '2026'
+    },
+    {
+      id: '12',
+      icon: '',
+      lang: 'PhpMyAdmin',
+      desc: '',
+      date: '2024'
+    },
+    {
+      id: '13',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mariadb/mariadb-original.svg',
+      lang: 'MariaDB',
+      desc: '',
+      date: '2024'
+    }
+  ],
+
+  Others: [
+    {
+      id: '14',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+      lang: 'C++',
+      desc: '',
+      blocks: 3,
+      date: '2024'
+    },
+    {
+      id: '15',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg',
+      lang: 'Rust',
+      desc: '',
       blocks: 4,
-      date: '2004.02.12'
+      date: '2025'
     },
     {
-      id: 'starfox',
-      icon: 'arwing',
-      game: 'Star Fox Adventures',
-      desc: 'Thorntail Hollow complete. 71 Scarabs collected.',
+      id: '16',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg',
+      lang: 'Lua',
+      desc: '',
+      blocks: 6,
+      date: '2023'
+    },
+    {
+      id: '17',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg',
+      lang: '.Net',
+      desc: '',
+      blocks: 13,
+      date: '2024'
+    },
+    {
+      id: '18',
+      icon: 'https://cdn.simpleicons.org/dotnet',
+      lang: 'WinForms',
+      desc: '',
+      blocks: 12,
+      date: '2022'
+    },
+    {
+      id: '19',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg',
+      lang: 'Unity',
+      desc: '',
+      blocks: 4,
+      date: '2021'
+    },
+    {
+      id: '20',
+      icon: 'https://cdn.simpleicons.org/love',
+      lang: 'LOVE2D',
+      desc: '',
       blocks: 9,
-      date: '2002.11.24'
+      date: '2023'
+    },
+    {
+      id: '21',
+      icon: 'https://cdn.simpleicons.org/sfml',
+      lang: 'SFML',
+      desc: '',
+      blocks: 9,
+      date: '2025'
+    }
+  ], 
+  Tools: [
+    {
+      id: '30',
+      icon: 'https://cdn.simpleicons.org/linux/FFFFFF', // dont work
+      lang: 'WSL',
+      desc: '',
+      blocks: 3,
+      date: '2025'
+    },
+    {
+      id: '31',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',
+      lang: 'VS Code',
+      desc: '',
+      blocks: 4,
+      date: '2023'
+    },
+    {
+      id: '32',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visualstudio/visualstudio-plain.svg',
+      lang: 'Visual Stuidio',
+      desc: '',
+      blocks: 6,
+      date: '2021'
+    },
+    {
+      id: '33',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jetbrains/jetbrains-original.svg',
+      lang: 'JetBrains Rider',
+      desc: '',
+      blocks: 13,
+      date: '2026'
+    },
+    {
+      id: '34',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg',
+      lang: 'JetBrains IntelliJ',
+      desc: '',
+      blocks: 12,
+      date: '2026'
+    },
+    {
+      id: '35',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuget/nuget-original.svg',
+      lang: 'NuGet',
+      desc: '',
+      blocks: 4,
+      date: '2024'
+    },
+    {
+      id: '36',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
+      lang: 'GitHub',
+      desc: '',
+      blocks: 9,
+      date: '2024'
+    },
+    {
+      id: '37',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+      lang: 'Git',
+      desc: '',
+      blocks: 9,
+      date: '2025'
+    },
+    {
+      id: '38',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
+      lang: 'Postman',
+      desc: '',
+      blocks: 9,
+      date: '2025'
+    },
+    {
+      id: '39',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/npm/npm-original-wordmark.svg',
+      lang: 'Npm',
+      desc: '',
+      blocks: 9,
+      date: '2026'
+    },
+    {
+      id: '40',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+      lang: 'Docker',
+      desc: '',
+      blocks: 9,
+      date: '2026'
+    },
+    {
+      id: '41',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg',
+      lang: 'Cargo',
+      desc: '',
+      blocks: 9,
+      date: '2025'
+    },
+    {
+      id: '42',
+      icon: 'https://cdn.simpleicons.org/neovim',
+      lang: 'NeoVim',
+      desc: '',
+      blocks: 9,
+      date: '2025'
+    },
+    {
+      id: '43',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+      lang: 'Linux',
+      desc: '',
+      blocks: 9,
+      date: '2023'
+    },
+    {
+      id: '44',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg',
+      lang: 'Window(xp, visa, 7, 8, 10, 11)',
+      desc: "don't ask why I have used a Windows version older then me and yess that is also the order in which i have use windows" ,
+      blocks: 9,
+      date: '2012'
+    },
+    {
+      id: '45',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg',
+      lang: 'Android',
+      desc: '',
+      blocks: 9,
+      date: '2016'
+    },
+    {
+      id: '46',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-plain.svg',
+      lang: 'Ubuntu',
+      desc: '',
+      blocks: 9,
+      date: '2023'
+    },
+    {
+      id: '47',
+      icon: 'https://cdn.simpleicons.org/linuxmint',
+      lang: 'Linux Mint',
+      desc: '',
+      blocks: 9,
+      date: '2024'
+    },
+    {
+      id: '48',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg',
+      lang: 'Arch',
+      desc: '',
+      blocks: 9,
+      date: '2026'
+    },
+    {
+      id: '49',
+      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg',
+      lang: 'Debain',
+      desc: '',
+      blocks: 9,
+      date: '2026'
     }
   ]
 };
