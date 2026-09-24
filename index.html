@@ -252,35 +252,166 @@ body{height:100%;margin:0;background-color:var(--bg);color:var(--ink)}
   </section>
 
   <!-- OPTIONS -->
-  <section x-show="layer === 'options'" x-cloak x-transition.opacity.duration.400ms class="absolute inset-0 z-10 flex flex-col pt-[86px] pb-12 px-[clamp(14px,3vw,36px)]" aria-label="About and contact">
-    <div class="grid items-start flex-1 min-h-0 gap-[18px] overflow-auto grid-cols-1 md:grid-cols-2">
-      <section class="p-2.5 panel order-2 md:order-1">
-        <template x-for="row in optRows" :key="row.id">
-          <div>
-            <div x-show="row.sect" class="px-4 pt-3.5 pb-1.5 text-xs font-extrabold tracking-[.2em] text-mute" x-text="row.sect"></div>
-            <div x-show="!row.sect" :data-row="row.n" role="button" class="flex items-center justify-between gap-3 px-4 py-3.5 border cursor-pointer rounded-2xl transition"
-                 :class="opt.idx === row.n ? 'border-gold/60 bg-gold/10' : 'border-transparent'" @mouseenter="optFocus(row.n, true)" @click="optClick(row, $event)">
-              <span class="text-[13px] font-black tracking-[.16em]" :class="opt.idx === row.n && 'text-gold'" x-text="row.k"></span>
-              <span class="flex items-center gap-2 text-sm text-right text-dim">
-                <button x-show="row.kind === 'set'" data-d="-1" aria-label="Previous value" class="px-1 transition-opacity text-gold" :class="opt.idx === row.n ? 'opacity-100' : 'opacity-0'">◀</button>
-                <span x-show="row.key !== 'pos'" x-text="optVal(row)"></span>
-                <span x-show="row.key === 'pos'" class="inline-flex gap-[3px]"><template x-for="k in 9" :key="k"><i class="w-[5px] h-3.5 rounded-sm" :class="k - 5 === pos ? 'bg-gold' : 'bg-white/15'"></i></template></span>
-                <button x-show="row.kind === 'set'" data-d="1" aria-label="Next value" class="px-1 transition-opacity text-gold" :class="opt.idx === row.n ? 'opacity-100' : 'opacity-0'">▶</button>
-              </span>
-            </div>
+<section
+  x-show="layer === 'options'"
+  x-cloak
+  x-transition.opacity.duration.400ms
+  class="absolute inset-0 z-10 flex flex-col pt-[86px] pb-12 px-[clamp(14px,3vw,36px)]"
+  aria-label="About and contact"
+>
+  <div class="grid items-start flex-1 min-h-0 gap-[18px] overflow-auto grid-cols-1 md:grid-cols-2">
+
+    <!-- OPTIONS -->
+    <section class="p-2.5 panel order-2 md:order-1">
+      <template x-for="row in optRows" :key="row.id">
+        <div>
+
+          <div
+            x-show="row.sect"
+            class="px-4 pt-3.5 pb-1.5 text-xs font-extrabold tracking-[.2em] text-mute"
+            x-text="row.sect">
           </div>
-        </template>
-      </section>
-      <section class="p-6 panel order-1 md:order-2">
-        <span class="inline-flex items-center gap-2 px-3 py-1.5 text-[13px] font-bold rounded-full text-padA bg-padA/10 border border-padA/35"><i class="w-2 h-2 rounded-full bg-padA pulse"></i><span x-text="C.status"></span></span>
-        <h3 class="mt-4 mb-0.5 text-[clamp(26px,3vw,34px)] font-black" x-text="C.name"></h3>
-        <div class="mb-3.5 text-[15px] text-lav" x-text="C.role"></div>
-        <p class="m-0 mb-5 text-[15px] leading-[1.65] text-[#dcd7fb] max-w-[62ch]" x-text="C.about"></p>
-        <div class="grid grid-cols-3 gap-2.5">
-          <template x-for="s in C.stats" :key="s.k"><div class="p-3.5 border rounded-2xl bg-white/[.04] border-line"><b class="block mb-0.5 text-base font-black sm:text-xl" x-text="s.v"></b><span class="text-xs text-dim" x-text="s.k"></span></div></template>
+
+          <div
+            x-show="!row.sect"
+            :data-row="row.n"
+            role="button"
+            class="flex items-center justify-between gap-3 px-4 py-3.5 border cursor-pointer rounded-2xl transition"
+            :class="opt.idx === row.n
+              ? 'border-gold/60 bg-gold/10'
+              : 'border-transparent'"
+            @mouseenter="optFocus(row.n, true)"
+            @click="optClick(row, $event)"
+          >
+
+            <span
+              class="text-[13px] font-black tracking-[.16em]"
+              :class="opt.idx === row.n && 'text-gold'"
+              x-text="row.k">
+            </span>
+
+            <span class="flex items-center gap-2 text-sm text-right text-dim">
+
+              <button
+                x-show="row.kind === 'set'"
+                data-d="-1"
+                aria-label="Previous value"
+                class="px-1 transition-opacity text-gold"
+                :class="opt.idx === row.n ? 'opacity-100' : 'opacity-0'"
+              >
+                ◀
+              </button>
+
+              <span
+                x-show="row.key !== 'pos'"
+                x-text="optVal(row)">
+              </span>
+
+              <span
+                x-show="row.key === 'pos'"
+                class="inline-flex gap-[3px]"
+              >
+                <template x-for="k in 9" :key="k">
+                  <i
+                    class="w-[5px] h-3.5 rounded-sm"
+                    :class="k - 5 === pos
+                      ? 'bg-gold'
+                      : 'bg-white/15'"
+                  ></i>
+                </template>
+              </span>
+
+              <button
+                x-show="row.kind === 'set'"
+                data-d="1"
+                aria-label="Next value"
+                class="px-1 transition-opacity text-gold"
+                :class="opt.idx === row.n ? 'opacity-100' : 'opacity-0'"
+              >
+                ▶
+              </button>
+
+            </span>
+          </div>
         </div>
-      </section>
-    </div>
+      </template>
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="p-6 panel order-1 md:order-2">
+
+      <!-- TEXT + IMAGE SIDE BY SIDE -->
+      <div class="grid items-center gap-6 md:grid-cols-[1fr_220px]">
+
+        <!-- TEXT -->
+        <div>
+
+          <span
+            class="inline-flex items-center gap-2 px-3 py-1.5 text-[13px] font-bold rounded-full text-padA bg-padA/10 border border-padA/35"
+          >
+            <i class="w-2 h-2 rounded-full bg-padA pulse"></i>
+            <span x-text="C.status"></span>
+          </span>
+
+          <h3
+            class="mt-4 mb-0.5 text-[clamp(26px,3vw,34px)] font-black"
+            x-text="C.name">
+          </h3>
+
+          <div
+            class="mb-3.5 text-[15px] text-lav"
+            x-text="C.role">
+          </div>
+
+          <p
+            class="m-0 text-[15px] leading-[1.65] text-[#dcd7fb] max-w-[62ch]"
+            x-text="C.about">
+          </p>
+
+        </div>
+
+
+        <!-- IMAGE ON RIGHT -->
+        <div
+          class="relative w-full overflow-hidden border rounded-2xl border-line bg-white/[.04] aspect-square"
+        >
+          <img
+            src="./quidon.jpg"
+            alt="About me"
+          >
+        </div>
+
+      </div>
+
+
+      <!-- STATS -->
+      <div class="grid grid-cols-3 gap-2.5 mt-6">
+
+        <template x-for="s in C.stats" :key="s.k">
+
+          <div class="p-3.5 border rounded-2xl bg-white/[.04] border-line">
+
+            <b
+              class="block mb-0.5 text-base font-black sm:text-xl"
+              x-text="s.v">
+            </b>
+
+            <span
+              class="text-xs text-dim"
+              x-text="s.k">
+            </span>
+
+          </div>
+
+        </template>
+
+      </div>
+
+    </section>
+
+  </div>
+</section>
   </section>
 
   <!-- HINTS + TOAST -->
