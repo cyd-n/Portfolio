@@ -1,5 +1,6 @@
 const CONFIG = {
   name: "Quidon Roethof",
+  myFace: "./quidon.jpg",
   initials: "QR",
   role: "Software Developer",
   status: "HBO Software Development, part-time",
