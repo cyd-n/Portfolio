@@ -93,6 +93,7 @@ const CONFIG = {
       { name: "Tailwind CSS",    items: [], iconimg:"https://api.iconify.design/simple-icons/tailwindcss.svg"  },
       { name: "Rust libs",       items: ["Tokio", "Ratatui"], iconimg:"https://cdn.simpleicons.org/rust"  },
       { name: "Unity",           items: [], iconimg:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg"  },
+      { name: "Godot(C#)",       items: [], iconimg:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/godot/godot-original.svg"  },
       { name: "Love2D",          items: [], iconimg:"https://cdn.simpleicons.org/lov"  },
       { name: "SFML",            items: [], iconimg:"https://cdn.simpleicons.org/sfml"  },
       { name: "Spectra Console", items: ["Spectra Console"] } ], iconimg:""  },
