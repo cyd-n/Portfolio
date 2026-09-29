@@ -121,7 +121,12 @@ const CONFIG = {
       { name: "Ubuntu",                   comment: "", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-plain.svg" },
       { name: "Linux mint",               comment: "", iconimg: "https://cdn.simpleicons.org/linuxmint" }, 
       { name: "Arch Linux",               comment: "", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg" },
-      { name: "Debain",                   comment: "My current OS", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg" }] },
+      { name: "Gemini",                   comment: "", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" },
+      { name: "Claude",                   comment: "", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/anthropic/anthropic-original.svg" },
+      { name: "Z.ai",                     comment: "", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zai/zai-original.svg" },
+      { name: "Deepseek",                 comment: "", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/deepseek/deepseek-original.svg" },
+      { name: "ChatGpt",                  comment: "", iconimg: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openai/openai-original.svg" },
+      { name: "Olama",                    comment: "", iconimg:"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/llama/llama-original.svg" }] },
     D: { label: "Concepts", files: [
       { name: "Prompt engineering",       comment: "I like coding more but can write prompts for AI", iconimg: "https://api.iconify.design/mdi/robot-outline.svg" },
       { name: "Bitwise operations",       comment: "I like it. It like logic gates", iconimg: "https://api.iconify.design/mdi/code-braces.svg" },
